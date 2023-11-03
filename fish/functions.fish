@@ -208,11 +208,20 @@ function setupgit2
     ssh-add ~/.ssh/id_ed25519
 end
 # is it a `main` or a `master` repo?
-alias gitmainormaster="git branch --format '%(refname:short)' --sort=-committerdate --list master main | head -n1"
-alias main="git checkout (gitmainormaster)"
-alias master="main"
+function gitmainormaster
+    git branch --format '%(refname:short)' --sort=-committerdate --list master main | head -n1
+end
 
-alias gst "git status"
+function main
+    git checkout (gitmainormaster)
+end
+function master
+    main
+end
+
+function gst
+    git status
+end
 
 function githistory -d "list of all git repo commits piped into fzf"
     git log --oneline --graph --color=always | nl | fzf --ansi --track --no-sort --layout=reverse-list
@@ -231,9 +240,14 @@ function lazyg
     git push
 end
 
-alias gcl "git clone"
+function gcl
+    git clone
+end
 # run hugo server
-alias hug="hugo server -F --bind=127.0.0.0:8844 -p=8844 --baseURL=http://127.0.0.0:8844"
+function hug
+    # hugo server -F --bind=127.0.0.0:8844 -p=8844 --baseURL=http://127.0.0.0:8844
+    hugo server -F --bind=127.0.0.0 -p=8844 --baseURL=http://127.0.0.0:8844
+end
 
 # encrypt files with gnupg
 

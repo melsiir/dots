@@ -1,7 +1,7 @@
 return {
   "romgrk/barbar.nvim",
-  -- event = "InsertEnter",
-  enabled = true,
+  event = { "VeryLazy", "BufReadPre", "BufNewFile" },
+  enabled = false,
   dependencies = {
     "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
     "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
@@ -19,6 +19,7 @@ return {
     },
     exclude_ft = {
       "dashboard",
+      "alpha",
     },
   },
   -- version = '^1.0.0', -- optional: only update when a new 1.x version is released

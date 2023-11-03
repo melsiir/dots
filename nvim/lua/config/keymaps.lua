@@ -38,6 +38,9 @@ local map = vim.keymap.set
 -- Select all
 map("n", "<C-a>", "gg<S-v>G", { desc = "Select all" })
 
+-- Reload configuration without restart nvim
+map("n", "<leader>r", "<cmd>so %<CR>", { desc = "Reload configuration" })
+
 -- Split window
 -- map('n', 'ss', '<cmd>split<Return><C-w>w')
 -- map('n', 'sv', '<cmd>vsplit<Return><C-w>w')
@@ -63,19 +66,23 @@ map("n", "<leader>cp", "yap", { desc = "copy Paragraph" })
 map("v", "z", ":'<,'>w .svg<Left><Left><Left><Left>", { desc = "save text from buffer" })
 
 --tab management
-map("n", "<Tab>", "<cmd>BufferNext<CR>", { desc = "switch between tabs" })
-map("n", "tc", "<cmd>BufferClose<cr>", { desc = "Close Tab" })
-map("n", "tp", "<cmd>BufferPin<CR>", opts)
-map("n", "<A-1>", "<Cmd>BufferGoto 1<CR>", opts)
-map("n", "<A-2>", "<Cmd>BufferGoto 2<CR>", opts)
-map("n", "<A-3>", "<Cmd>BufferGoto 3<CR>", opts)
-map("n", "<A-4>", "<Cmd>BufferGoto 4<CR>", opts)
-map("n", "<A-5>", "<Cmd>BufferGoto 5<CR>", opts)
-map("n", "<A-6>", "<Cmd>BufferGoto 6<CR>", opts)
-map("n", "<A-7>", "<Cmd>BufferGoto 7<CR>", opts)
-map("n", "<A-8>", "<Cmd>BufferGoto 8<CR>", opts)
-map("n", "<A-9>", "<Cmd>BufferGoto 9<CR>", opts)
-map("n", "<A-0>", "<Cmd>BufferLast<CR>", opts)
+-- map("n", "<Tab>", "<cmd>BufferNext<CR>", { desc = "switch between tabs" })
+-- map("n", "tc", "<cmd>BufferClose<cr>", { desc = "Close Tab" })
+-- map("n", "tp", "<cmd>BufferPin<CR>", opts)
+-- map("n", "<A-1>", "<Cmd>BufferGoto 1<CR>", opts)
+-- map("n", "<A-2>", "<Cmd>BufferGoto 2<CR>", opts)
+-- map("n", "<A-3>", "<Cmd>BufferGoto 3<CR>", opts)
+-- map("n", "<A-4>", "<Cmd>BufferGoto 4<CR>", opts)
+-- map("n", "<A-5>", "<Cmd>BufferGoto 5<CR>", opts)
+-- map("n", "<A-6>", "<Cmd>BufferGoto 6<CR>", opts)
+-- map("n", "<A-7>", "<Cmd>BufferGoto 7<CR>", opts)
+-- map("n", "<A-8>", "<Cmd>BufferGoto 8<CR>", opts)
+-- map("n", "<A-9>", "<Cmd>BufferGoto 9<CR>", opts)
+-- map("n", "<A-0>", "<Cmd>BufferLast<CR>", opts)
+
+-- tab management bufferline
+map("n", "<Tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "switch between tabs" })
+map("n", "tc", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 
 -- Select last paste
 map("n", "gpp", "'`['.strpart(getregtype(), 0, 1).'`]'", { expr = true, desc = "Select Paste" })

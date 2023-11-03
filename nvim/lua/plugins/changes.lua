@@ -20,6 +20,10 @@ return {
   },
   {
     "norcalli/nvim-colorizer.lua",
-    event = "VeryLazy",
+    -- event = "Verylazy",
+    -- lazy = true,
+    opts = {
+      "*",
+    },
   },
 }

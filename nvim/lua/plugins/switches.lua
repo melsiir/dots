@@ -2,7 +2,8 @@
 
 return {
   { "neovim/nvim-lspconfig", enabled = false },
-  { "nvimdev/dashboard-nvim", enabled = true },
+  { "nvimdev/dashboard-nvim", enabled = false },
+  { "goolord/alpha-nvim", enabled = false },
   { "hrsh7th/nvim-cmp", enabled = true },
 
   -- this plugin handle error and warrning messages
