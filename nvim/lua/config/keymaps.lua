@@ -49,11 +49,15 @@ map("x", "<leader>k", ":move'<-2<CR>gv=gv", { desc = "Move selection up" })
 map("x", "<leader>j", ":move'>+<CR>gv=gv", { desc = "Move selection down" })
 
 -- Duplicate lines without affecting PRIMARY and CLIPBOARD selections.
-map("n", "<leader>d", 'm`""Y""P``', { desc = "Duplicate line" })
-map("x", "<leader>d", '""Y""Pgv', { desc = "Duplicate selection" })
+map("n", "<leader>dd", 'm`""Y""P``', { desc = "Duplicate line" })
+map("x", "<leader>dd", '""Y""Pgv', { desc = "Duplicate selection" })
 
 -- Duplicate paragraph
-map("n", "<leader>cp", "yap<S-}>p", { desc = "Duplicate Paragraph" })
+map("n", "<leader>dp", "yap<S-}>p", { desc = "Duplicate Paragraph" })
+-- delete paragraph
+map("n", "<leader>de", "dap", { desc = "Delete Paragraph" })
+--copy paragraph
+map("n", "<leader>cp", "yap", { desc = "copy Paragraph" })
 
 -- save from buffer
 map("v", "z", ":'<,'>w .svg<Left><Left><Left><Left>", { desc = "save text from buffer" })
@@ -80,10 +84,12 @@ map("n", "gpp", "'`['.strpart(getregtype(), 0, 1).'`]'", { expr = true, desc = "
 map("x", "sg", "<cmd>s//gc<Left><Left><Left>", { desc = "Substitute Within Selection" })
 
 map({ "n", "x" }, "<BS>", "%", { remap = true, desc = "Jump to Paren" })
+-- nice treesitter keymap use ctrl-space to select the whole block
+-- or the whole string
 
--- saves and leaves
+-- leaves
 map("n", "<leader>qw", "<cmd>wq <CR>", { desc = "save and exit" })
-map("n", "<leader>qa", "<cmd>q! <CR>", { desc = "quiet without confirmation!" })
+map("n", "<leader>qq", "<cmd>q! <CR>", { desc = "quiet without confirmation!" })
 
 -- comment
 -- map('n', '<leader>/', '<cmd>lua require("Comment.api").toggle.linewise.current()<CR>', { desc = 'Toggle comment' })

@@ -1,6 +1,6 @@
 #!/path/to/fish
 
-set libs ",libxml2,glib,libandroid-support,libdav1d,libaom,libde265,libffi,libheif,libgnutls,libjpeg-turbo,liblzma,libpng,libnpth,libtiff,librav1e,libwebp,libx265,"
+set libs ",libxml2,glib,libandroid-support,libdav1d,libaom,libde265,libffi,libheif,libgnutls,libjpeg-turbo,liblzma,libpng,libnpth,libtiff,librav1e,libwebp,libx265,c-ares,"
 
 set pkgUpdate "ed,liblzma,xz-utils,zlib,zstd,libbz2,bzip2,libgmp,coreutils,libmd,diffutils,gzip,less,libandroid-glob,tar,dpkg,findutils,libgpg-error,libassuan,libgcrypt,libnpth,gpgv,grep,ca-certificates,openssl,libcurl,curl,libnghttp2,libssh2,resolv-conf,libexpat,libevent,libunbound,unbound,libnettle,libunistring,libidn2,libgnutls,liblz4,sed,termux-am-socket,dash,libmpfr,readline,gawk,procps,psmisc,termux-am,termux-exec,libsmartcols,libcap-ng,dialog,util-linux,termux-tools,termux-keyring,termux-licenses,xxhash,apt,bash,libcrypt,bash-completion,busybox,pcre,command-not-found,debianutils,dos2unix,inetutils2,libtirpc,lsof,nano,unzip,libtirpc,inetutils,unzip,libexpat,net-tools"
 
@@ -20,7 +20,7 @@ set luaLanguageServer "lua-language-server"
 
 set shfmt "shfmt"
 
-set nodejs "libicu,nodejs"
+set nodejs "libicu,c-ares,nodejs"
 
 set neovim "libmsgpack,libiconv,libluajit,libuv,luv,libandroid-support,libvterm,libunibilium,libtermkey,libtreesitter,neovim"
 

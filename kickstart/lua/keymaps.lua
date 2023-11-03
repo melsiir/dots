@@ -162,20 +162,20 @@ keymap('n', '<C-n>', '<cmd>set nu!<CR>', opt)
 -- plugin maps
 
 -- telescope
-keymap('n', '<leader>ff', '<cmd>Telescope find_files <CR>', {desc = "find files"})
-keymap('n', '<leader>fw', '<cmd>Telescope live_grep <CR>', {desc = "find word in directory"})
-keymap('n', '<leader>fb', '<cmd>Telescope buffers <CR>' ,{desc = "find in current buffer"})
-keymap('n', '<leader>fo', '<cmd> Telescope oldfiles <CR>', {desc = "find old files"})
-keymap('n', '<leader>fg', '<cmd> Telescope find_files ({cwd="$HOME/.config/nvim"}) <CR>', {desc = "find config"})
-keymap('n', '<leader>ft', '<cmd> lua require("telescope.builtin").find_files({cwd="$HOME/.config/nvim"}) <CR>', {desc = "find config"})
-keymap('n', '<leader>fr', '<cmd> Telescope resume <CR>', {desc = "resume your last work"})
-keymap('n', '<leader>fh', '<cmd> Telescope help_tags <CR>', {desc = "find help tags"})
-keymap('n', '<leader>bm', '<cmd> Telescope marks <CR>', {desc = "find bookmarks"})
-keymap('n', '<leader>fq', '<cmd> Telescope quickfix <CR>', {desc = "find quickfix"})
-keymap('n', '<leader>fd', '<cmd> Telescope commands <CR>', {desc = "find commands"})
-keymap('n', '<leader>fs', '<cmd> Telescope git_status  <CR>', {desc = "find git status"})
-keymap('n', '<leader>fc', '<cmd> Telescope git_commits  <CR>', {desc = "find git commits"})
-keymap('n', '<leader>fz', '<cmd> Telescope current_buffer_fuzzy_find <CR>', {desc = "fuzzy find in current buffer"})
+-- keymap('n', '<leader>ff', '<cmd>Telescope find_files <CR>', {desc = "find files"})
+-- keymap('n', '<leader>fw', '<cmd>Telescope live_grep <CR>', {desc = "find word in directory"})
+-- keymap('n', '<leader>fb', '<cmd>Telescope buffers <CR>' ,{desc = "find in current buffer"})
+-- keymap('n', '<leader>fo', '<cmd> Telescope oldfiles <CR>', {desc = "find old files"})
+-- keymap('n', '<leader>fg', '<cmd> Telescope find_files ({cwd="$HOME/.config/nvim"}) <CR>', {desc = "find config"})
+-- keymap('n', '<leader>ft', '<cmd> lua require("telescope.builtin").find_files({cwd="$HOME/.config/nvim"}) <CR>', {desc = "find config"})
+-- keymap('n', '<leader>fr', '<cmd> Telescope resume <CR>', {desc = "resume your last work"})
+-- keymap('n', '<leader>fh', '<cmd> Telescope help_tags <CR>', {desc = "find help tags"})
+-- keymap('n', '<leader>bm', '<cmd> Telescope marks <CR>', {desc = "find bookmarks"})
+-- keymap('n', '<leader>fq', '<cmd> Telescope quickfix <CR>', {desc = "find quickfix"})
+-- keymap('n', '<leader>fd', '<cmd> Telescope commands <CR>', {desc = "find commands"})
+-- keymap('n', '<leader>fs', '<cmd> Telescope git_status  <CR>', {desc = "find git status"})
+-- keymap('n', '<leader>fc', '<cmd> Telescope git_commits  <CR>', {desc = "find git commits"})
+-- keymap('n', '<leader>fz', '<cmd> Telescope current_buffer_fuzzy_find <CR>', {desc = "fuzzy find in current buffer"})
 -- vim.keymap.set('n', '<leader>fk', require('telescope.builtin').find_files({cwd="config"}), { desc = '[S]earch [c]onfig' })
 --  local status, telescope = pcall(require, "telescope.builtin")
 -- if status then
@@ -211,7 +211,6 @@ keymap('n', '<leader>fm', '<cmd>lua require("conform").format()<CR>', { desc = '
 -- lunch lazy.nvim
 keymap('n', '<leader>l', '<cmd>Lazy<CR>', { desc = 'Open Lazy UI' })
 
-
 -- Remap for dealing with word wrap
 keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -232,5 +231,3 @@ keymap('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic 
 keymap('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 keymap('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 keymap('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-
-

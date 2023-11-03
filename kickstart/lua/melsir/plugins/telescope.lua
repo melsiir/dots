@@ -75,7 +75,8 @@ return {
     end, { desc = '[/] Fuzzily search in current buffer' })
     -- open telescope in nvim config directory
     vim.keymap.set('n', '<leader>fg', function()
-      require('telescope.builtin').find_files { cwd = '~/.config/nvim' }
+      -- require('telescope.builtin').find_files { cwd = '~/.config/nvim' }
+      require('telescope.builtin').find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = 'find nvim config' })
 
     -- key map

@@ -250,7 +250,7 @@ function decrypt
 end
 
 # Function for extracting different files
-function ex
+function ext
     switch $argv
         case *.tar.bz2
             tar xjf $argv

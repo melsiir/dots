@@ -11,8 +11,6 @@ require 'keymaps'
   - https://neovim.io/doc/user/lua-guide.html
  ]]
 
-
-
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -29,9 +27,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
 require('lazy').setup({
-    ui = {
+  ui = {
     border = 'rounded',
   },
 
@@ -78,7 +75,7 @@ require('lazy').setup({
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
-  
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
   {
@@ -91,7 +88,7 @@ require('lazy').setup({
   },
   'Mofiqul/dracula.nvim',
   { 'folke/tokyonight.nvim', priority = 1000 },
-{
+  {
     -- Theme inspired by twitch colors
     'usirin/bleed-purple.nvim',
     priority = 1000,
@@ -167,9 +164,6 @@ require('lazy').setup({
   -- },
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-
-
-  
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
