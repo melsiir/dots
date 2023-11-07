@@ -1,6 +1,9 @@
 -- neovim stocks maps
 -- w - jump curser to the next word
--- -- o - append newline from normal mode
+-- o - append newline from normal mode
+-- yy - copy whole line
+-- yw - copy to the end of the word
+-- yb - copy to the start of the word
 -- fs - jump to the next s
 -- dd - to delete the entire line.
 -- u - undo
@@ -27,6 +30,11 @@
 -- Add any additional maps here
 
 local map = vim.keymap.set
+
+-- local opts = { silent = true }
+-- map("", "<Space>", "<Nop>", opts)
+-- vim.g.mapleader = " "
+-- vim.g.maplocalleader = " "
 
 -- Delete a word backwards
 -- map('n', 'dw', 'vb"_d', {desc = "Delete a word backwards"})
@@ -105,3 +113,5 @@ map("n", "<leader>qq", "<cmd>q! <CR>", { desc = "quiet without confirmation!" })
 -- format buffer -- the function can be found in base.lua
 -- map('n', '<leader>fm', '<cmd>lua FormatBuffer()<CR>', { desc = 'format buffer' })
 map("n", "<leader>fm", '<cmd>lua require("conform").format()<CR>', { desc = "format buffer" })
+
+-- map("n", "<leader>l", "<cmd>Lazy<CR>", { desc = "Open Lazy UI" })

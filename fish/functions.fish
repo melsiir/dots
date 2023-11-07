@@ -1,3 +1,14 @@
+function t
+    if string match -q "*-*" $argv
+        set b (string replace "-" "" "$argv")
+        echo $$b
+    else
+        echo $$argv
+    end
+
+    # echo $argv[2..-1]
+end
+
 # Searches and replaces for text in all files in the current folder
 function log --description "git commit browser. uses fzf"
     # todo add "$argv" in there without breaking the no-argv case.
@@ -124,9 +135,18 @@ function copypath --description "Copy full file path"
 end
 
 # Create and go to the directory
-function mkdirg
+function mkdirg -d "make directory and cd to it"
     mkdir "$argv"
     cd "$argv"
+end
+
+function mkdirmv -d "make directory and copy files into it"
+    if test -z $argv[2]
+        echo "please enter files or directories you want to move"
+        return
+    end
+    mkdir $argv[-1]
+    mv $argv[1..-2] $argv[-1]
 end
 
 # Goes up a specified number of directories  (i.e. up 4)
@@ -171,6 +191,17 @@ function sedmatch -d "check string matches with sed"
     end
 end
 
+# generate new ssh intity
+function gen-ssh
+    ssh-keygen -f ~/.ssh/$argv -C "$argv"
+    echo "Host $argv" >>~/.ssh/config
+    echo " HostName __IP__" >>~/.ssh/config
+    echo " ForwardAgent yes" >>~/.ssh/config
+    echo " PreferredAuthentications publickey" >>~/.ssh/config
+    echo " IdentityFile ~/.ssh/$argv" >>~/.ssh/config
+    echo "" >>~/.ssh/config
+    vim ~/.ssh/config
+end
 
 # github
 function setupgit
@@ -207,6 +238,11 @@ function setupgit2
     # private ssh key ssh agent
     ssh-add ~/.ssh/id_ed25519
 end
+
+# print repo remote urls
+function giturl
+    git remote get-url --all origin $argv
+end
 # is it a `main` or a `master` repo?
 function gitmainormaster
     git branch --format '%(refname:short)' --sort=-committerdate --list master main | head -n1
@@ -241,14 +277,21 @@ function lazyg
 end
 
 function gcl
-    git clone
+    git clone $argv
+end
+function get -d "download with curl"
+    curl -LJO $argv
 end
 # run hugo server
 function hug
     # hugo server -F --bind=127.0.0.0:8844 -p=8844 --baseURL=http://127.0.0.0:8844
-    hugo server -F --bind=127.0.0.0 -p=8844 --baseURL=http://127.0.0.0:8844
+    hugo server -F --bind=127.0.0.0 --baseURL=http://127.0.0.0
 end
 
+function hs -d "start hugo development server"
+    # -D include drafts 
+    hugo server -D $argv
+end
 # encrypt files with gnupg
 
 function encrypt
@@ -261,6 +304,22 @@ end
 function decrypt
     gpg --batch --output (string replace ".gpg" "" $argv[1]) --passphrase $argv[2] --decrypt $argv[1]
     echo "$argv[1] decrypted successfully"
+end
+
+function zd -d "list files in dir quickly"
+    set -l finds (fd --type directory --max-depth 5)
+
+    if [ -z "$finds" ]
+        return 0
+    end
+
+    set -l fzf_selection (printf '%s\n' $finds | fzf)
+
+    if [ -n "$fzf_selection" ]
+        cd $fzf_selection && eza --grid --all --classify --icons
+    else
+        return 0
+    end
 end
 
 # Function for extracting different files
@@ -509,7 +568,9 @@ end
 function spinner
     echo " The proccess is running"
     while true
-        for X in - / '|' '\\'
+        # for X in ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
+        for x in 🕛 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚
+            # for X in - / '|' '\\'
             # echo -en "\b$X";
             echo -en "\b$X"
             sleep 0.1
@@ -595,7 +656,7 @@ function gpass -d "cheap password manager"
 end
 
 function cfont -d "change termux font"
-    rm $HOME/.termux/font.ttf
+    # rm $HOME/.termux/font.ttf
     cp -R $argv $fon
 end
 
@@ -616,6 +677,21 @@ function tertheme -d "change termux theme with fuzzy finder"
     echo "successfully selected $selectednoprop"
     rm -fR $HOME/.termux/colors.properties
     ctheme $themedir/$selectedTheme
+    termux-reload-settings
+    # cm (fzf --preview='head -$LINES {}' ls)
+end
+
+function terfont -d "change termux font with fuzzy finder"
+    set fontdir $repo/nerd_fonts
+    set selectedFont ( ls -I "*.txt" $fontdir  | fzf --border rounded --border-label="Termux Fonts")
+    if test -z $selectedFont
+        echo "no font selected"
+        return
+    end
+    set selectednoprop (string replace ".ttf" "" $selectedFont)
+    echo "successfully selected $selectednoprop"
+    rm -fR $HOME/.termux/font.ttf
+    cfont $fontdir/$selectedFont
     termux-reload-settings
     # cm (fzf --preview='head -$LINES {}' ls)
 end

@@ -1,180 +1,50 @@
 
 set -xU repo /storage/0A56-1B19/backup/Termux
-source ~/.config/fish/onDemand/packages.fish
+# source ~/.config/fish/onDemand/packages.fish
 
 
-function app
+function app -d "install app from local storage"
+    # get all packages names and their dependencies and their dirs
+    source ~/.config/fish/onDemand/packages.fish
+
+    if test -z $argv
+        echo "please enter package name"
+        return
+    end
     set toInstall
     #loop through given arguments
     for i in $argv
         # set packageToInstall
-        switch $i
-            case cmake
-                set packageToInstall = $cmake
-                set packagedir cmake
-            case pkgUpdate
-                set packageToInstall = $pkgUpdate
-                set packagedir pkgUpdate
-            case make
-                set packageToInstall = $make
-                set packagedir make
-            case fish
-                set packageToInstall = $fish
-                set packagedir fish
-            case neovim
-                set packageToInstall = $neovim
-                set packagedir neovim
-            case lua
-                set packageToInstall = $lua
-                set packagedir lua
-            case lua-language-server
-                set packageToInstall = $luaLanguageServer
-                set packagedir coding
-            case shfmt
-                set packageToInstall = $shfmt
-                set packagedir coding
-            case stylua
-                set packageToInstall = $stylua
-                set packagedir coding
-            case nodejs
-                set packageToInstall = $nodejs
-                set packagedir nodejs
-            case tree
-                set packageToInstall = $tree
-                set packagedir tree
-            case aria2
-                set packageToInstall = $aria2
-                set packagedir aria2
-            case newsboat
-                set packageToInstall = $newsboat
-                set packagedir newsboat
-            case gnupg
-                set packageToInstall = $gnupg
-                set packagedir gnupg
-            case imagemagick
-                set packageToInstall = $imagemagick
-                set packagedir imagemagick
-            case openssh
-                set packageToInstall = $openssh
-                set packagedir openssh
-            case openssl
-                set packageToInstall = $openssl
-                set packagedir openssl
-            case openssltool or case openssl-tool
-                set packageToInstall = $openssltool
-                set packagedir openssl-tool
-            case libqrencode
-                set packageToInstall = $libqrencode
-                set packagedir libqrencode
-            case w3m
-                set packageToInstall = $w3m
-                set packagedir w3m
-            case exa
-                set packageToInstall = $exa
-                set packagedir eza
-            case eza
-                set packageToInstall = $eza
-                set packagedir eza
-            case fzf
-                set packageToInstall = $fzf
-                set packagedir fzf
-            case fastfetch
-                set packageToInstall = $fastfetch
-                set packagedir fastfetch
-            case ripgrep
-                set packageToInstall = $ripgrep
-                set packagedir ripgrep
-            case rsync
-                set packageToInstall = $rsync
-                set packagedir rsync
-            case termuxapi or case termux-api
-                set packageToInstall = $termuxapi
-                set packagedir termuxapi
-            case emacs
-                set packageToInstall = $emacs
-                set packagedir emacs
-            case wget
-                set packageToInstall = $wget
-                set packagedir wget
-            case osspuuid or case ossp-uuid
-                set packageToInstall = $osspuuid
-                set packagedir ossp-uuid
-            case xmlstarlet
-                set packageToInstall = $xmlstarlet
-                set packagedir xmlstarlet
-            case starship
-                set packageToInstall = $starship
-                set packagedir starship
-            case fd
-                set packageToInstall = $fd
-                set packagedir a_semi_dependent
-            case bat
-                set packageToInstall = $bat
-                set packagedir a_semi_dependent
-            case zoxide
-                set packageToInstall = $zoxide
-                set packagedir a_semi_dependent
-            case duf
-                set packageToInstall = $duf
-                set packagedir a_semi_dependent
-            case dua
-                set packageToInstall = $dua
-                set packagedir a_semi_dependent
-            case hugo
-                set packageToInstall = $hugo
-                set packagedir a_semi_dependent
-            case p7zip
-                set packageToInstall = $p7zip
-                set packagedir a_semi_dependent
-            case zip
-                set packageToInstall = $zip
-                set packagedir zip
-            case unrar
-                set packageToInstall = $unrar
-                set packagedir all
-            case git
-                set packageToInstall = $git
-                set packagedir git
-            case sift
-                set packageToInstall = $sift
-                set packagedir a_semi_dependent
-            case ccrypt
-                set packageToInstall = $ccrypt
-                set packagedir a_semi_dependent
-            case jq
-                set packageToInstall = $jq
-                set packagedir jq
-            case strace
-                set packageToInstall = $strace
-                set packagedir strace
-            case shfmt
-                mkdir $HOME/.local/bin
-                cp $repo/offline-repo/shfmt/bin/shfmt $HOME/.local/bin
-                echo "shfmt installed successfully"
-                return
-            case omf
-                if ! test -d $HOME/.config/omf
-                    cp $repo/offline-repo/omf/config/omf $HOME/.config
-                end
-                cp $repo/offline-repo/omf/share/omf.zip $HOME/.local/share
-                unzip $HOME/.local/share/omf.zip -d $HOME/.local/share/
-                cp $repo/offline-repo/omf/omf.fish $HOME/.config/fish/conf.d
-                rm $HOME/.local/share/omf.zip
-                echo "oh-my-fish installed successfully"
-                return
-            case tealdeer
-                cp -r $repo/offline-repo/tealdeer $HOME/
-                dpkg -i $HOME/tealdeer/tealdeer_*.deb
-                mkdir $HOME/.cache/tealdeer/tldr-pages
-                unzip -q $HOME/tealdeer/tldr-pages.zip -d $HOME/.cache/tealdeer/tldr-pages
-                rm -r $HOME/tealdeer
-                echo \n
-                echo "tealdeer installed successfully"
-                return
-            case ""
-                echo "please enter package name"
+        if test $i = omf
+            if ! test -d $HOME/.config/omf
+                cp $repo/offline-repo/omf/config/omf $HOME/.config
+            end
+            cp $repo/offline-repo/omf/share/omf.zip $HOME/.local/share
+            unzip $HOME/.local/share/omf.zip -d $HOME/.local/share/
+            cp $repo/offline-repo/omf/omf.fish $HOME/.config/fish/conf.d
+            rm $HOME/.local/share/omf.zip
+            echo "oh-my-fish installed successfully"
+            return
+        else if test $i = tealdeer
+            cp -r $repo/offline-repo/tealdeer $HOME/
+            dpkg -i $HOME/tealdeer/tealdeer_*.deb
+            mkdir $HOME/.cache/tealdeer/tldr-pages
+            unzip -q $HOME/tealdeer/tldr-pages.zip -d $HOME/.cache/tealdeer/tldr-pages
+            rm -r $HOME/tealdeer
+            echo \n
+            echo "tealdeer installed successfully"
+            return
+        else
+            if string match -q "*-*" $i
+                set noDashPkg (string replace "-" "" "$i")
+                # echo $$b
+                set packageToInstall = $$noDashPkg[1]
+                set packagedir (string split $$noDashPkg)
+            else
+                set packageToInstall = $$i[1]
+                set packagedir (string split $$i)
+            end
         end
-
         # find the package and install it 
         mkdir $phone/temp
         if test ! -d $phone/temp/$packagedir
@@ -182,7 +52,7 @@ function app
         end
         for package in (string split , $packageToInstall)
             #find libs debs because they are located in separate directory
-            if string match -q "*,$package,*" $libs
+            if string match -q "*,$package,*" $libs[1]
                 find $repo/offline-repo/libs -name "$package\_*.deb" | while read -l pkg
                     cp $pkg $phone/temp
                     set toInstall $toInstall $pkg
@@ -201,9 +71,10 @@ end
 
 
 function appremove
+    source ~/.config/fish/onDemand/packages.fish
     for package in $argv
         set toremove
-        for i in (string split ',' $$package)
+        for i in (string split ',' $$package[1])
             set toremove $toremove $i
         end
     end

@@ -7,4 +7,4 @@ local opt = vim.opt
 opt.relativenumber = false -- Relative line numbers
 opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.confirm = false -- Confirm to save changes before exiting modified buffer
-opt.cursorline = true -- Enable highlighting of the current line
+opt.cursorline = false -- Enable highlighting of the current line

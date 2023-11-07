@@ -41,6 +41,11 @@ replace at line 3
 
 sed -i "3s/cool/nice/" file.txt
 
+sort lines in text file alphabiticaly
+sort file.txt
+or you can pip the stdout into othe file
+sort file.txt > file2.txt
+
 in fish you want find file and do something withit
 use read -l instead of read -r
 
@@ -51,7 +56,7 @@ sift  "_(.*?).deb" file1.txt > file2.txt
 selecting from certain charactar to end of something
 usefull with nvim replace and maybe sed
 
-for example replace for the _ sign to .deb 
+for example replace for the _ sign to .deb
 _.*.deb
 ncurses_6.4.20231001-1_arm.deb
 the result after replacing selection with whitespace:

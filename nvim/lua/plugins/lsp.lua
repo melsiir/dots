@@ -1,6 +1,6 @@
 return {
   "neovim/nvim-lspconfig",
-  -- enabled = false,
+  enabled = false,
   -- dependencies = {
   --   { "j-hui/fidget.nvim", tag = "legacy", opts = {} },
   -- },
