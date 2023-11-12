@@ -1,6 +1,6 @@
 {
   "function": {
-    "prefix": "func",
+    "prefix": "fun",
     "body": [
       "function ${1:name}",
       "end"
@@ -74,6 +74,12 @@
     "prefix": "rt",
     "body": "return ${1:value}",
     "description": "return value",
+    "scope": "fish"
+  },
+  "test": {
+    "prefix": "test",
+    "body": "if test ${1:expression}\n\t$2\nend",
+    "description": "test statement",
     "scope": "fish"
   },
   "source": {

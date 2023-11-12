@@ -6,6 +6,7 @@ SETUVAR Z_DATA:/data/data/com\x2etermux/files/home/\x2elocal/share/z/data
 SETUVAR Z_DATA_DIR:/data/data/com\x2etermux/files/home/\x2elocal/share/z
 SETUVAR Z_EXCLUDE:\x5e/data/data/com\x2etermux/files/home\x24
 SETUVAR __fish_initialized:3400
+SETUVAR _fisher_plugins:lepisma/fish\x2dprogress
 SETUVAR --export cheatsheet:/data/data/com\x2etermux/files/home/\x2econfig/fish/doc/linux_cheatsheet\x2etxt
 SETUVAR --export documents:/storage/emulated/0/Documents
 SETUVAR --export dotfiles:/data/data/com\x2etermux/files/home/\x2econfig

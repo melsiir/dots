@@ -1,3 +1,8 @@
+-- set this to false to eneble this config
+if true then
+  return {}
+end
+
 --[[
 Avoiding problems on redraw. Bug in upstream neovim
 Example issues:

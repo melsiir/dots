@@ -1,7 +1,8 @@
 -- here you can enable or disable plugins
 
 return {
-  -- { "neovim/nvim-lspconfig", enabled = false },
+  { "neovim/nvim-lspconfig", enabled = false },
+  { "williamboman/mason.nvim", enabled = false },
   -- { "lewis6991/gitsigns.nvim", enabled = false },
   --  { "nvim-lualine/lualine.nvim", enabled = false },
 

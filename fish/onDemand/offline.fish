@@ -1,16 +1,53 @@
 
+#get list installed packages
+#dpkg -l | awk '/^ii/ { print $2 ;}'
+#check specific package installed
+#
+#dpkg -s <packagename>
+#dpkg-query -l <packagename>
+#apt -qq list fish --installed 
+#if return 0 echo command after && if return 1 excute command after ||
+# return 1 && echo hero || echo fun
+
+# copy deb file and all it dependencies to archive dir and run this for example for strace
+# apt-get -f install strace
+# and this will install strace automaticly with all it dependencies
 set -xU repo /storage/0A56-1B19/backup/Termux
 # source ~/.config/fish/onDemand/packages.fish
 
+function geturls
+    apt-get --print-uris --yes -d --reinstall install fish (apt-cache depends fish | grep "  Depends:" |  sed 's/  Depends://' | sed ':a;N;$!ba;s/\n//g') | grep ^\' | cut -d\' -f2 >downloads.list
+end
 
+function isInstalled
+    #return 1 if not installed  or  0 if installed
+    #may used like this 
+    #isInstalled fish && echo yes || echo no
+    return (dpkg-query -W -f '${Status}\n' "$argv[1]" 2>&1|awk '/ok installed/{print 0;exit}{print 1}')
+end
+
+function ty
+    set PACKAGE_NAME $argv
+
+    if ! command -v $PACKAGE_NAME >/dev/null
+        echo "$PACKAGE_NAME not installed"
+    else
+        echo "$PACKAGE_NAME already installed"
+    end
+end
+
+function tf
+    dpkg-query -l | grep $argv | wc -l
+end
 function app -d "install app from local storage"
     # get all packages names and their dependencies and their dirs
     source ~/.config/fish/onDemand/packages.fish
 
-    if test -z $argv
+    if test -z $argv[1]
         echo "please enter package name"
         return
     end
+
     set toInstall
     #loop through given arguments
     for i in $argv
@@ -34,31 +71,36 @@ function app -d "install app from local storage"
             echo \n
             echo "tealdeer installed successfully"
             return
+            # else if test -z (echo $$i)
+            #     echo "package $i is not found in this offline repo"
+            #     return
+
         else
             if string match -q "*-*" $i
-                set noDashPkg (string replace "-" "" "$i")
-                # echo $$b
-                set packageToInstall = $$noDashPkg[1]
-                set packagedir (string split $$noDashPkg)
+                set noDashPkg (string replace -a "-" "" "$i")
+                set pkgData (string split "@" $$noDashPkg)
+                set packageToInstall = $pkgData[1]
+                set packagedir $pkgData[2]
             else
-                set packageToInstall = $$i[1]
-                set packagedir (string split $$i)
+                set pkgData (string split "@" $$i)
+                set packageToInstall = $pkgData[1]
+                set packagedir $pkgData[2]
             end
         end
         # find the package and install it 
-        mkdir $phone/temp
-        if test ! -d $phone/temp/$packagedir
-            cp -r $repo/offline-repo/$packagedir $phone/temp
+        mkdir $HOME/temp
+        if test ! -d $HOME/temp/$packagedir
+            cp -r $repo/offline-repo/$packagedir $HOME/temp
         end
         for package in (string split , $packageToInstall)
             #find libs debs because they are located in separate directory
-            if string match -q "*,$package,*" $libs[1]
+            if string match -q "*,$package,*" $libs[1] && find "$HOME/temp" -type f -name "$package\_*.deb"
                 find $repo/offline-repo/libs -name "$package\_*.deb" | while read -l pkg
-                    cp $pkg $phone/temp
+                    cp $pkg $HOME/temp
                     set toInstall $toInstall $pkg
                 end
             end
-            find $phone/temp/$packagedir -name "$package\_*.deb" | while read pkg
+            find $HOME/temp/$packagedir -name "$package\_*.deb" | while read pkg
                 # find $repo/offline-repo/$packagedir -name "$package\_*.deb" | while read pkg
                 # dpkg -i $pkg
                 set toInstall $toInstall $pkg
@@ -66,15 +108,16 @@ function app -d "install app from local storage"
         end
     end
     dpkg -i $toInstall
-    rm -r $phone/temp
+    rm -r $HOME/temp
 end
 
 
-function appremove
+function apprm -d "remove packages and all thair dependencies"
     source ~/.config/fish/onDemand/packages.fish
+    set toremove
     for package in $argv
-        set toremove
-        for i in (string split ',' $$package[1])
+        set raw (string split "@" $$package)[1]
+        for i in (string split ',' $raw)
             set toremove $toremove $i
         end
     end
@@ -82,7 +125,7 @@ function appremove
 end
 
 
-function apprm -d "remove packages and all thair dependencies"
+function appremve -d "remove packages and all thair dependencies"
     #not stable sometimes gives some package that are needed by other installed program
     #but thanks to dpkg it won't let remove package needed by another package
     set toremove

@@ -68,8 +68,8 @@ return {
     opts = function(_, opts)
       -- section_separators = '',
       -- empty separator does not interupt neovim stock startup screen
-      opts.options.section_separators = empty_component_separators
-      opts.options.component_separators = empty_component_separators
+      -- opts.options.section_separators = empty_component_separators
+      -- opts.options.component_separators = empty_component_separators
       opts.sections.lualine_z = {}
       opts.sections.lualine_y = {}
       opts.sections.lualine_y = {

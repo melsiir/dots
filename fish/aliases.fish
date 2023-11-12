@@ -69,6 +69,11 @@ end
 function aps
     apt search $argv
 end
+function apr -d "remove packages"
+    apt remove $argv
+    command apt autoremove --yes
+    #yes for confrmation good for automation
+end
 function uninstall
     pkg uninstall $argv
 end
@@ -175,35 +180,36 @@ if type -q eza
     function ll
         eza -l --color=auto --icons --group-directories-first
     end
+    function lll
+        eza --group-directories-first -lagF --git --time-style=long-iso --icons always
+    end
     function lt
         eza -aT --color=always --icons --group-directories-first
     end
-    function l.
-        eza -a | egrep "^\."
+    function l. -d "only show hidden"
+        eza -a | grep -E "^\."
     end
-    function dir
-        eza -al --color=always --icons --group-directories-first
+    function dir -d "list dirs only"
+        eza --only-dirs -a --icons auto --color auto
     end
-    function lx
+    function lx -d "sort by extension"
         eza --sort ext --color auto --icons --group-directories-first
-    end # sort by extension
-    function lk
+    end
+    function lk -d "sort by size"
         eza --sort size --color auto --icons --group-directories-first
-    end # sort by size
-    function lc
+    end
+    function lc -d " sort by change time"
         eza --sort changed --color auto --icons --group-directories-first
-    end # sort by change time
-    function lu
+    end
+    function lu -d "sort by access time"
         eza --sort accessed --color auto --icons --group-directories-first
-    end # sort by access time
-    function lr
+    end
+    function lr -d "recursive ls"
         eza -R --color auto --icons --group-directories-first
     end
-    # recursive ls
-    function lt
+    function lt -d "sort by date"
         eza --sort date --color auto --icons --group-directories-first
-    end # sort by date
-
+    end
 else
     alias lla 'ls -Alh' # show hidden files
     alias lls 'ls -aFh --color=always' # add colors and file type extensions
@@ -264,6 +270,17 @@ end
 function topcpu
     /bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10
 end
+function topcpuf
+    set -l statusfile (random)(random).txt
+    /bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10 >$statusfile
+    sed -i "/\/bin\/ps -eo pcpu,pid,user,args/d" $statusfile
+    sed -i "/sort -k 1 -r/d" $statusfile
+    sed -i "/head -10/d" $statusfile
+    cat $statusfile
+    rm $statusfile
+
+end
+
 
 function rmrf -d "force remove"
     command rm -rfd $argv

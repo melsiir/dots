@@ -1,4 +1,5 @@
 return {
+  -- { 'nickeb96/fish.vim'},
   {
     -- Theme inspired by Atom
     "navarasu/onedark.nvim",
@@ -7,6 +8,11 @@ return {
     --   vim.cmd.colorscheme("onedark")
     -- end,
   },
+--   { 'gen740/SmoothCursor.nvim',
+--   config = function()
+--     require('smoothcursor').setup()
+--   end
+-- },
   {
     "folke/todo-comments.nvim",
     opts = {
@@ -67,4 +73,7 @@ return {
     --   },
     -- },
   },
+  -- {
+  --   "NvChad/ui",
+  -- },
 }

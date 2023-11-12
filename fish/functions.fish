@@ -227,7 +227,7 @@ function setupgit
     echo "git remote add origin git@github.com:githubUserName/repoName.git"
 end
 
-function setupgit2
+function setupgit2 -d "in case you don't want to create new ssh key"
     git config --global user.name "$argv[1]"
     git config --global user.email "$argv[2]"
     #store credential in cache 
@@ -280,8 +280,22 @@ function gcl
     git clone $argv
 end
 function get -d "download with curl"
-    curl -LJO $argv
+    set -l github_bolb "^(https?:\/\/)?github\.com([\/\w\?=.-]*)/blob/([\/\w\?=.-]*)"
+    set -l github_raw "^(https?:\/\/)?github\.com([\/\w\?=.-]*)/raw/([\/\w\?=.-]*)"
+    set -l github_clone "^(https?:\/\/)?github\.com([\/\w\?=.-]*)"
+    if string match -q --regex $github_bolb $argv[1]
+        set -l dn $argv
+        set dn (string replace "/blob/" "/raw/" $argv)
+        curl -LJO\# $dn
+    else if string match -q --regex $github_raw $argv[1]
+        curl -LJO\# $argv
+    else if string match -q --regex $github_clone $argv[1]
+        git clone $argv
+    else
+        curl -LJO\# $argv
+    end
 end
+
 # run hugo server
 function hug
     # hugo server -F --bind=127.0.0.0:8844 -p=8844 --baseURL=http://127.0.0.0:8844
@@ -497,7 +511,7 @@ abbr -ag obrs obsResdots
 
 # get package urls to download for offline
 function pkgurl
-    apt --print-uris install $argv >out
+    apt-get --print-uris install $argv >out
     cat out | grep http | tr -d \' | awk '{print $1}' >deblist
     rm out
     echo "the pkg(s) url(s) are listed in deblist"
@@ -566,12 +580,23 @@ function extdebs -d "extract packges names from log file"
 end
 
 function spinner
+    set pid $last_pid
     echo " The proccess is running"
     while true
-        # for X in ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
-        for x in 🕛 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚
+        for X in ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
             # for X in - / '|' '\\'
-            # echo -en "\b$X";
+            echo -en "\b$X"
+            sleep 0.1
+        end
+    end
+end
+function sp
+    $argv & set PID $last_pid
+
+    echo " The proccess is running"
+    while kill -0 $PID 2>/dev/null
+        for X in ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
+            # for X in - / '|' '\\'
             echo -en "\b$X"
             sleep 0.1
         end
@@ -587,27 +612,75 @@ function toggleship -d "switch on and off starship theme"
 end
 
 function freshstart
-    app pkgUpdate neovim fzf eza lua make zip \
+    set -xU repo /storage/0A56-1B19/backup/Termux
+    app pkgUpdate
+    mkdir -p temp
+    #    apt -f install
+    # dpkg --configure util-linux
+    cp $repo/offline-repo/pkgUpdate/libsmartcols_*.deb ./temp
+    cp $repo/offline-repo/pkgUpdate/termux-tools_*.deb ./temp
+    cp $repo/offline-repo/pkgUpdate/util-linux_*.deb ./temp
+    dpkg -i ./temp/libsmartcols_*.deb
+    dpkg -i ./temp/util-linux_*.deb
+    dpkg -i --force-confnew ./temp/termux-tools_*.deb
+    # apt -f install
+    rm -rf temp
+    app neovim fzf eza lua make zip \
         tree git sift bat fd
+    updateAptsrc
 end
 
-
+# set list (printf %s (cat ./bitward.csv ))
 function gpass -d "cheap password manager"
-    set passfile $phone/Aaaa/bitward.csv
-    set linenumber (grep -in $argv[1] $passfile | cut -d':' -f1)
-    if test -z $linenumber
-        echo "entery not exist!"
-        return
-    else if test -z $argv
+    if test (count $argv) -eq 0
         echo "Please Enter username or email adress!"
         return
     end
-    set 2dentry (sed -n {$linenumber[2]}p $passfile)
-    if string match -q "*$argv[1]*" $2dentry
-        if string length -q $argv[2]
-            for k in $linenumber
-                if string match -q "*$argv[2]*" (sed -n {$k}p $passfile)
-                    set passline (sed -n {$k}p $passfile)
+    set sourcePass $HOME/storage/external-1/../../../../DCIM/bitward.csv
+    command cp -rf $sourcePass $HOME/../usr/tmp
+    # set passfile $phone/Aaaa/bitward.csv
+    set passfile $HOME/../usr/tmp/bitward.csv
+    set linenumber (grep -in $argv[1] $passfile | cut -d':' -f1)
+    if test (count $linenumber) -eq 0
+        echo "entery does not exist!"
+        return
+    else if test (count $linenumber ) -eq 1
+        set passline (sed -n {$linenumber}p $passfile)
+        set passArray
+        for i in (string split ","  $passline)
+            set passArray $passArray $i
+        end
+        echo \n
+        echo "Link:    $passArray[4]"
+        echo "Email:    $passArray[9]"
+        echo "Password:    $passArray[10]"
+        echo "email@password"
+        echo "$passArray[9]@$passArray[10]"
+        echo \n
+        return
+    else
+        set 2dentry (sed -n {$linenumber[2]}p $passfile)
+        if string match -q "*$argv[1]*" $2dentry
+            if string length -q $argv[2]
+                for k in $linenumber
+                    if string match -q "*$argv[2]*" (sed -n {$k}p $passfile)
+                        set passline (sed -n {$k}p $passfile)
+                        set passArray
+                        for i in (string split ","  $passline)
+                            set passArray $passArray $i
+                        end
+                        echo \n
+                        echo " Link:    $passArray[4]"
+                        echo " Email:    $passArray[9]"
+                        echo " Password:    $passArray[10]"
+                        echo " email@password"
+                        echo " $passArray[9]@$passArray[10]"
+                        echo \n
+                    end
+                end
+            else
+                for j in $linenumber
+                    set passline (sed -n {$j}p $passfile)
                     set passArray
                     for i in (string split ","  $passline)
                         set passArray $passArray $i
@@ -621,38 +694,41 @@ function gpass -d "cheap password manager"
                     echo \n
                 end
             end
-        else
-
-            for j in $linenumber
-                set passline (sed -n {$j}p $passfile)
-                set passArray
-                for i in (string split ","  $passline)
-                    set passArray $passArray $i
-                end
-                echo \n
-                echo " Link:    $passArray[4]"
-                echo " Email:    $passArray[9]"
-                echo " Password:    $passArray[10]"
-                echo " email@password"
-                echo " $passArray[9]@$passArray[10]"
-                echo \n
-            end
         end
-    else
-        echo not
-        set passline (sed -n {$linenumber}p $passfile)
-        set passArray
-        for i in (string split ","  $passline)
-            set passArray $passArray $i
-        end
-        echo \n
-        echo "Link:    $passArray[4]"
-        echo "Email:    $passArray[9]"
-        echo "Password:    $passArray[10]"
-        echo "email@password"
-        echo "$passArray[9]@$passArray[10]"
-        echo \n
     end
+end
+
+function pp
+    # set -l list (sed  ':a;N;$!ba;s/\n/@@@@@@@/g'  $HOME/warf.csv)
+    set -l list (cat -A  $HOME/bitward.csv)
+    set -l enteriesNum 0
+    set -l chosenList
+    for i in $list
+        if string match -q "*$argv[1]*" $i
+            set enteriesNum (math $enteriesNum + 1)
+            set chosenList $chosenList \n $i
+        end
+    end
+    # echo -e $chosenList
+    if test $enteriesNum -eq 0
+        echo "entery does not exist"
+        return
+    else #if test $enteriesNum -eq 1
+        set chosenList (string replace ",," ",null," $chosenList)
+        set -l passArray (string split "," $chosenList)
+        echo \n
+        echo " Link:    $passArray[6]"
+        echo " Email:    $passArray[11]"
+        echo " Password:    $passArray[12]"
+        echo " email@password"
+        echo " $passArray[11]@$passArray[12]"
+        echo \n
+
+        # for i in ( string split "," $chosenList)
+        #     echo $i
+        # end
+    end
+
 end
 
 function cfont -d "change termux font"
@@ -683,7 +759,7 @@ end
 
 function terfont -d "change termux font with fuzzy finder"
     set fontdir $repo/nerd_fonts
-    set selectedFont ( ls -I "*.txt" $fontdir  | fzf --border rounded --border-label="Termux Fonts")
+    set selectedFont (command ls -R $fontdir | grep -E '\.ttf$' |  fzf --border rounded --border-label="Termux Fonts")
     if test -z $selectedFont
         echo "no font selected"
         return
@@ -691,7 +767,19 @@ function terfont -d "change termux font with fuzzy finder"
     set selectednoprop (string replace ".ttf" "" $selectedFont)
     echo "successfully selected $selectednoprop"
     rm -fR $HOME/.termux/font.ttf
-    cfont $fontdir/$selectedFont
+    cfont (find $fontdir -regex ".*$selectedFont")
     termux-reload-settings
-    # cm (fzf --preview='head -$LINES {}' ls)
+end
+
+function updateAptsrc -d "update apt source list offline"
+    set Termux /storage/0A56-1B19/backup/Termux
+    cp $Termux/myConfig.zip ./
+    unzip -q myConfig.zip -d temp
+    if test -d $HOME/../usr/var/lib/apt/lists
+        rm -rf $HOME/../usr/var/lib/apt/lists
+    end
+    mkdir -p $HOME/../usr/var/lib/apt/lists
+    cp -fr temp/packages/* $HOME/../usr/var/lib/apt/lists
+    rm -rf temp
+    rm -rf myConfig.zip
 end

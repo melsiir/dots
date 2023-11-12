@@ -31,3 +31,26 @@ export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f
 #check if command nvim executable: if command -qs nvim
 #check if command nvim not executable: if not command -qs nvim
 
+Special variables
+Some bash variables and their closest fish equivalent:
+
+$*, $@, $1 and so on: $argv
+
+$?: $status
+
+$$: $fish_pid
+
+$#: No variable, instead use count $argv
+
+$!: $last_pid
+
+$0: status filename
+
+$-: Mostly status is-interactive and status is-login
+
+# get pid for proccess ex
+
+echo hi | echo $last_pid
+Create a file in the home with the name `.fish_variables`
+and call in it `set -xU VAR_NAME VAR_VAULE`
+to set secret values in fish env.
