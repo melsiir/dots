@@ -340,7 +340,6 @@ function encrypt
 end
 
 #decrypt files with gnugp
-
 function decrypt
     gpg --batch --output (string replace ".gpg" "" $argv[1]) --passphrase $argv[2] --decrypt $argv[1]
     echo "$argv[1] decrypted successfully"
