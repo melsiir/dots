@@ -250,8 +250,6 @@ function gitssh -d "generate and add ssh key to github"
     echo "git remote add origin git@github.com:githubUserName/repoName.git"
 end
 
-
-
 # print repo remote urls
 function giturl
     git remote get-url --all origin $argv
