@@ -46,10 +46,15 @@ function cpp
 end
 
 function copyClip -d "copy content to clipboard"
-    if test -f $argv[1]
-        termux-clipboard-set <$argv
+    if test (count $argv) -eq 0
+        termux-clipboard-set
     else
-        termux-clipboard-set $argv
+        if test -f $argv[1]
+            termux-clipboard-set <$argv
+        else
+            termux-clipboard-set $argv
+        end
+
     end
 end
 
@@ -126,7 +131,7 @@ end
 # show the path of file or dir
 function copypath --description "Copy full file path"
     # readlink -e $argv #| xclip -sel clip
-    readlink -e $argv | termux-clipboard-set
+    readlink -e $argv | copyClip
     echo "copied to clipboard"
 end
 
@@ -200,15 +205,19 @@ function gen-ssh
 end
 
 # github
-function setup-git-ssh -d "generate and add ssh key to github"
-    set gitName "$argv[1]"
-    set gitEmail "$argv[2]"
-    #set gitb name or password
-    if test (count $argv) -eq 0
-        set gitConfigName (git config --global --get user.name)
-        set gitConfigEmail (git config --global --get user.email)
-
-        read --prompt "echo ' Name: ' " -l name
+function git-ssh -d "generate and add ssh key to github"
+    set -l gitName "$argv[1]"
+    set -l gitEmail "$argv[2]"
+    #set git name and email
+    if test (count $argv) -le 1
+        set -l gitConfigName (git config --global --get user.name)
+        set -l gitConfigEmail (git config --global --get user.email)
+        if test -z $gitConfigName
+            read --prompt "echo ' Enter your name: ' " -l gitName
+            read --prompt "echo ' Enter your email: ' " -l gitEmail
+            git config --global user.name $gitName
+            git config --global user.email $gitEmail
+        end
     else
         # if supplied as argument set them from 
         git config --global user.name $gitName
@@ -217,10 +226,10 @@ function setup-git-ssh -d "generate and add ssh key to github"
     #store credential in cache 
     # security flow !
     git config --global credential.helper cache
-    # check existing ssh key
-    # ls -al ~/.ssh
+
+    set -l keyName github
     # generate new key
-    ssh-keygen -t ed25519 -C "$argv[1]"
+    ssh-keygen -t ed25519 -C $gitName
     #start ssh agent
     eval (ssh-agent -c)
     # private ssh key ssh agent
@@ -234,10 +243,24 @@ function setup-git-ssh -d "generate and add ssh key to github"
     echo "git remote add origin git@github.com:githubUserName/repoName.git"
 end
 
-function setup-git-ssh-reuse -d "in case you don't want to create new ssh key"
-
-    git config --global user.name "$argv[1]"
-    git config --global user.email "$argv[2]"
+function git-ssh-reuse -d "in case you don't want to create new ssh key"
+    set -l gitName "$argv[1]"
+    set -l gitEmail "$argv[2]"
+    #set gitb name or password
+    if test (count $argv) -le 1
+        set -l gitConfigName (git config --global --get user.name)
+        set -l gitConfigEmail (git config --global --get user.email)
+        if test -z $gitConfigName
+            read --prompt "echo ' Enter your name: ' " -l gitName
+            read --prompt "echo ' Enter your email: ' " -l gitEmail
+            git config --global user.name $gitName
+            git config --global user.email $gitEmail
+        end
+    else
+        # if supplied as argument set them from 
+        git config --global user.name $gitName
+        git config --global user.email $gitEmail
+    end
     #store credential in cache 
     # security flow !
     git config --global credential.helper cache

@@ -9,7 +9,7 @@ function xx
     exit 0
 end
 function linecount
-    wc -l
+    wc -l $argv
 end
 
 # empty obsidian trash
