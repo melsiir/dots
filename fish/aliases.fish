@@ -12,6 +12,10 @@ function linecount
     wc -l $argv
 end
 
+function op -d "open docs and files"
+    open $argv
+end
+
 # empty obsidian trash
 
 # edit  config
@@ -143,12 +147,12 @@ function .....
 end
 
 # cd into the old directory
-function bd
+function bd -d "cd into the old directory"
     cd $dirprev[-1]
 end
 
 # Remove a directory and all files
-function rmd
+function rmd -d "Remove a directory and all files"
     /bin/rm --recursive --force --verbose $argv
 end
 
@@ -228,7 +232,7 @@ else
 end
 
 # alias to show the date
-function da
+function da -d "show the date"
     date +%Y-%m-%d %A %T %Z
 end
 
@@ -256,12 +260,12 @@ function 700
 end
 
 # Search command line history
-function h
+function h -d "Search command line history"
     history | grep $argv
 end
 
 # Search running processes
-function p
+function p -d "Search running processes"
     ps aux | grep $argv
 end
 function topcpu
@@ -284,19 +288,19 @@ function rmrf -d "force remove"
 end
 
 # Search files in the current folder
-function f
+function f -d "Search files in the current folder"
     find . | grep $argv
 end
 # alias rptext ; find . -type f -exec sed -i ; s/$argv[1]/bar/g" {} +;end
 
 # To see if a command is aliased, a file, or a built-in command
-function checkcommand
+function checkcommand -d "To see if a command is aliased, a file, or a built-in command"
     type -t $argv
 end
 
 
 # Alias's to show disk space and space used in a folder
-function diskspace
+function diskspace -d "show disk space and space used in a folder"
     command du -S | sort -n -r | more $argv
 end
 function folders
@@ -360,8 +364,11 @@ end
 
 # SHA1
 function sha1
-    openssl sha1 $argv
+    openssl sha1 $argv | cut -f 2 -d " "
 end
 function md5
-    openssl md5 $argv
+    openssl md5 $argv | cut -f 2 -d " "
+end
+function sha256
+    openssl sha256 $argv | cut -f 2 -d " "
 end

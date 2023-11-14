@@ -95,36 +95,32 @@ function noemptylines
 end
 
 #remove all whitespaces at the end of lines
-function nowspace
+function nowspace -d "remove all whitespaces at the end of lines"
     sed -i 's/[[:blank:]]*$//g' $argv
 end
 
-function remove-dupl
+function remove-dupl -d "remove duplicate files"
     # remove duplicate files
     set dir (pwd)
-    set Bash "$HOME/.config/fish/bash"
-    chmod 700 $Bash/remove-dupl.sh
-    $Bash/remove-dupl.sh $dir
+    remove-duplicate $dir
 end
 
 
 # Copy and go to the directory
-function cpg
-    if [ -d "$2" ]
-        then
-        cp "$1" "$2" && cd "$2"
+function cpg -d "Copy and go to the directory"
+    if test -d "$argv[2]"
+        cp "$argv[1]" "$argv[2]" && cd "$argv[2]"
     else
-        cp "$1" "$2"
+        cp "$argv[1]" "$argv[2]"
     end
 end
 
 # Move and go to the directory
-function mvg
-    if [ -d "$2" ]
-        then
-        mv "$1" "$2" && cd "$2"
+function mvg -d "Move and go to the directory"
+    if test -d "$argv[2]"
+        mv "$argv[1]" "$argv[2]" && cd "$argv[2]"
     else
-        mv "$1" "$2"
+        mv "$argv[1]" "$argv[2]"
     end
 end
 
@@ -205,7 +201,7 @@ function gen-ssh
 end
 
 # github
-function git-ssh -d "generate and add ssh key to github"
+function gitssh -d "generate and add ssh key to github"
     set -l gitName "$argv[1]"
     set -l gitEmail "$argv[2]"
     #set git name and email
@@ -217,6 +213,9 @@ function git-ssh -d "generate and add ssh key to github"
             read --prompt "echo ' Enter your email: ' " -l gitEmail
             git config --global user.name $gitName
             git config --global user.email $gitEmail
+        else
+            set gitName $gitConfigName
+            # set gitEmail $gitConfigEmail
         end
     else
         # if supplied as argument set them from 
@@ -228,47 +227,29 @@ function git-ssh -d "generate and add ssh key to github"
     git config --global credential.helper cache
 
     set -l keyName github
-    # generate new key
-    ssh-keygen -t ed25519 -C $gitName
-    #start ssh agent
-    eval (ssh-agent -c)
-    # private ssh key ssh agent
-    ssh-add ~/.ssh/id_ed25519
-    echo "copy the the following public key to make personal access token in github"
-    copyClip ~/.ssh/id_ed25519.pub
-    echo "the public key copyed to your clipboard"
-    open "https://github.com/settings/ssh/new"
-    echo \n
+    if test -f ~/.ssh/$keyName
+        #if there already key just use it
+        #start ssh agent
+        eval (ssh-agent -c)
+        # private ssh key ssh agent
+        ssh-add ~/.ssh/$keyName
+    else
+        # generate new key
+        ssh-keygen -f ~/.ssh/$keyName -t ed25519 -C $gitName
+        #start ssh agent
+        eval (ssh-agent -c)
+        # private ssh key ssh agent
+        ssh-add ~/.ssh/$keyName
+        echo "copy the the following public key to make personal access token in github"
+        copyClip ~/.ssh/$keyName.pub
+        echo "the public key copyed to your clipboard"
+        echo "now goto this link and create new access token"
+        open "https://github.com/settings/ssh/new"
+    end
     echo "to auth with github make sure to add the the remote url as ssh url like:"
     echo "git remote add origin git@github.com:githubUserName/repoName.git"
 end
 
-function git-ssh-reuse -d "in case you don't want to create new ssh key"
-    set -l gitName "$argv[1]"
-    set -l gitEmail "$argv[2]"
-    #set gitb name or password
-    if test (count $argv) -le 1
-        set -l gitConfigName (git config --global --get user.name)
-        set -l gitConfigEmail (git config --global --get user.email)
-        if test -z $gitConfigName
-            read --prompt "echo ' Enter your name: ' " -l gitName
-            read --prompt "echo ' Enter your email: ' " -l gitEmail
-            git config --global user.name $gitName
-            git config --global user.email $gitEmail
-        end
-    else
-        # if supplied as argument set them from 
-        git config --global user.name $gitName
-        git config --global user.email $gitEmail
-    end
-    #store credential in cache 
-    # security flow !
-    git config --global credential.helper cache
-    #start ssh agent
-    eval (ssh-agent -c)
-    # private ssh key ssh agent
-    ssh-add ~/.ssh/id_ed25519
-end
 
 
 # print repo remote urls
