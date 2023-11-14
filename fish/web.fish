@@ -150,6 +150,21 @@ function virustotal --description "Check file hash by virustotal.com"
     #jq '.data .attributes .androguard .StringsInformation'
 end
 
+function virustotalurl
+    # send url for scan
+    curl --request POST \
+        --url https://www.virustotal.com/api/v3/urls \
+        --form url="$argv[2]"
+    --header "x-apikey: "(cat ~/.stuff/keys/virustotal) \
+        | jq ".data .attributes .last_analysis_stats, .data .attributes .tags, .data .attributes .total_votes, .data .attributes .last_analysis_results .Kaspersky"
+
+    #   geturl scan 
+    curl --request GET \
+        --url https://www.virustotal.com/api/v3/urls/{id} \
+        --header "x-apikey: "(cat ~/.stuff/keys/virustotal) \
+        | jq ".data .attributes .last_analysis_stats, .data .attributes .tags, .data .attributes .total_votes, .data .attributes .last_analysis_results .Kaspersky"
+
+end
 
 function yan --description "Check word in yandex dictionary"
     test -e ~/.stuff/keys/yandex || echo "Get API key at https://yandex.com/dev/dictionary.stuff/keys/get/ and put in ~/.stuff/keys/yandex"

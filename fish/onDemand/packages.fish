@@ -1,11 +1,13 @@
-#!/path/to/fish
 # set variable_name@package_and_depenencies@package_dir
+#!/path/to/fish
 set aria2 "c-ares,libxml2,aria2"@aria2
 set bat bat@a_semi_dependent
 set ccrypt ccrypt@a_semi_dependent
 set cmake "libxml2,binutils,ndk-sysroot,libffi,libllvm,clang,libarchive,jsoncpp,rhash,cmake"@cmake
-set dua dua@a_semi_dependent
+set cronie cronie@a_semi_dependent
+set dnsutils "openssl,dnsutils"@a_semi_dependent
 set du fduf@a_semi_dependent
+set dua dua@a_semi_dependent
 set emacs "gnutls,libxml2,emacs"@emacs
 set exa "libgit2,exa"@eza
 set eza "libgit2,eza"@eza
@@ -33,6 +35,8 @@ set openssltool openssl-tool@openssl-tool
 set osspuuid ossp-uuid@ossp-uuid
 set p7zip p7zip@a_semi_dependent
 set pkgUpdate "ed,liblzma,xz-utils,zlib,zstd,libbz2,bzip2,libgmp,coreutils,libmd,diffutils,gzip,less,libandroid-glob,tar,dpkg,findutils,libgpg-error,libassuan,libgcrypt,libnpth,gpgv,grep,ca-certificates,openssl,libcurl,curl,libnghttp2,libssh2,resolv-conf,libexpat,libevent,libunbound,unbound,libnettle,libunistring,libidn2,libgnutls,liblz4,sed,termux-am-socket,dash,libmpfr,readline,gawk,procps,psmisc,termux-am,termux-exec,libsmartcols,libcap-ng,dialog,util-linux,termux-tools,termux-keyring,termux-licenses,xxhash,apt,bash,libcrypt,bash-completion,busybox,pcre,command-not-found,debianutils,dos2unix,inetutils2,libtirpc,lsof,nano,unzip,libtirpc,inetutils,unzip,libexpat,net-tools"@pkgUpdate
+set progress "libandroid-wordexp,progress"@progress
+set pv pv@progress
 set ripgrep "pcre2,ripgrep"@ripgrep
 set rsync "openssl-tool,libpopt,rsync"@rsync
 set shfmt shfmt@coding
@@ -40,6 +44,7 @@ set sift sift@a_semi_dependent
 set starship starship@starship
 set strace "argp,libelf,libdw,strace"@strace
 set stylua stylua@coding
+set subversion "libuuid,apr,apr-util,libsqlite,serf,utf8proc,subversion"@subversion
 set tealdeer tealdeer@tealdeer
 set termuxapi termux-api@termux-api
 set tree tree@tree
@@ -48,6 +53,6 @@ set unrar unrar@unrar
 set w3m "libgc,w3m"@w3m
 set wget "libuuid,wget"@wget
 set xmlstarlet "libxml2,libxslt,xmlstarlet"@xmlstarlet
-set zsh zsh@a_semi_dependent
 set zip "libandroid-support,zip"@zip
 set zoxide zoxide@a_semi_dependent
+set zsh zsh@a_semi_dependent

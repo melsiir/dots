@@ -1,3 +1,7 @@
+termux tmp directory is
+$TMPDIR
+in case you want to use it in scripts
+
 # customiziation
 # get prompt samples
 fish_config prompt show
@@ -51,6 +55,14 @@ $-: Mostly status is-interactive and status is-login
 # get pid for proccess ex
 
 echo hi | echo $last_pid
+
+Reading a File with Fish
+To gracefully read a file line by line in Fish, employ the read builtin.
+
+while read -la line
+    echo $line
+end < my_file
+
 Create a file in the home with the name `.fish_variables`
 and call in it `set -xU VAR_NAME VAR_VAULE`
 to set secret values in fish env.

@@ -42,9 +42,6 @@ end
 function config
     cd $HOME/.config
 end
-function opm
-    open README.md
-end
 function noswap
     rm -r ~/.local/state/nvim/swap
 end
@@ -174,11 +171,11 @@ end
 
 # Use eza instead of ls.
 if type -q eza
-    alias l="eza -al --color=always  --icons --group-directories-first"
+    alias l="eza -l --color=auto --icons --group-directories-first"
     alias ls="eza --color=auto  --icons --group-directories-first"
     alias la="eza -a --color=auto --icons --group-directories-first"
     function ll
-        eza -l --color=auto --icons --group-directories-first
+        eza -al --color=always --icons --group-directories-first
     end
     function lll
         eza --group-directories-first -lagF --git --time-style=long-iso --icons always

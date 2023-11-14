@@ -74,6 +74,10 @@ print last element of array
 
 someArry[-1]
 
+make uniqe name
+mktemp XXXXXXXX
+or
+mktemp name.XXXXXXXX
 
 
 github add new repo

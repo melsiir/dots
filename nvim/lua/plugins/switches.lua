@@ -1,4 +1,5 @@
 -- here you can enable or disable plugins
+--NOTE: here you can enable or disable plugins
 
 return {
   { "neovim/nvim-lspconfig", enabled = false },
@@ -25,6 +26,7 @@ return {
   --  make floating cmdline
   { "folke/noice.nvim", enabled = false },
   -- { "folke/which-key.nvim", enabled = false },
+  -- { "folke/todo-comments.nvim", enabled= false},
   -- { "folke/persistence.nvim", enabled = false },
   { "rcarriga/nvim-notify", enabled = false },
   -- { "nvim-treesitter/nvim-treesitter", enabled = true },

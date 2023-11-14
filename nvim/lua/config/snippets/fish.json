@@ -10,7 +10,7 @@
   },
   "echo": {
     "prefix": "echo",
-    "body": "echo \"${0:message}\"",
+    "body": "echo ${0:message}",
     "description": "Echo a message.",
     "scope": "fish"
   },
@@ -76,10 +76,28 @@
     "description": "return value",
     "scope": "fish"
   },
+  "set": {
+    "prefix": "st",
+    "body": "set $1 $0",
+    "description": "set variables",
+    "scope": "fish"
+  },
   "test": {
     "prefix": "test",
     "body": "if test ${1:expression}\n\t$2\nend",
     "description": "test statement",
+    "scope": "fish"
+  },
+  "shebang": {
+    "prefix": "!shebang",
+    "body": "#!/bin/fish",
+    "description": "fish's shebang",
+    "scope": "fish"
+  },
+  "breakpoint": {
+    "prefix": "bp",
+    "body": "breakpoint",
+    "description": "insert breakpoint for debugging",
     "scope": "fish"
   },
   "source": {

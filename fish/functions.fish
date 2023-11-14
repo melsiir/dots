@@ -1,22 +1,10 @@
-function t
-    if string match -q "*-*" $argv
-        set b (string replace "-" "" "$argv")
-        echo $$b
-    else
-        echo $$argv
-    end
-
-    # echo $argv[2..-1]
+function gu
+    echo "$argv"
+    breakpoint
+    echo $hireme
 end
 
 # Searches and replaces for text in all files in the current folder
-function log --description "git commit browser. uses fzf"
-    # todo add "$argv" in there without breaking the no-argv case.
-    git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" | fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --bind "ctrl-m:execute:
-                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | less -R'"
-end
-
 function ftext
     # -i case-insensitive
     # -I ignore binary files
@@ -57,6 +45,14 @@ function cpp
       END { print "" }' total_size="$(stat -c '%s' "$argv[1]")" count=0
 end
 
+function copyClip -d "copy content to clipboard"
+    if test -f $argv[1]
+        termux-clipboard-set <$argv
+    else
+        termux-clipboard-set $argv
+    end
+end
+
 function reload --description 'Reloads shell (i.e. invoke as a login shell)'
     exec $SHELL -l
 end
@@ -77,7 +73,7 @@ function trimend
     sed -i "$fend" $argv
 end
 
-function trimmd
+function trimmd -d "trim unnecesery content from markdown"
     trimstart $argv
     trimend $argv
 end
@@ -204,9 +200,20 @@ function gen-ssh
 end
 
 # github
-function setupgit
-    git config --global user.name "$argv[1]"
-    git config --global user.email "$argv[2]"
+function setup-git-ssh -d "generate and add ssh key to github"
+    set gitName "$argv[1]"
+    set gitEmail "$argv[2]"
+    #set gitb name or password
+    if test (count $argv) -eq 0
+        set gitConfigName (git config --global --get user.name)
+        set gitConfigEmail (git config --global --get user.email)
+
+        read --prompt "echo ' Name: ' " -l name
+    else
+        # if supplied as argument set them from 
+        git config --global user.name $gitName
+        git config --global user.email $gitEmail
+    end
     #store credential in cache 
     # security flow !
     git config --global credential.helper cache
@@ -214,20 +221,21 @@ function setupgit
     # ls -al ~/.ssh
     # generate new key
     ssh-keygen -t ed25519 -C "$argv[1]"
-
     #start ssh agent
     eval (ssh-agent -c)
     # private ssh key ssh agent
     ssh-add ~/.ssh/id_ed25519
     echo "copy the the following public key to make personal access token in github"
-    echo "at https://github.com/settings/ssh/new"
+    copyClip ~/.ssh/id_ed25519.pub
+    echo "the public key copyed to your clipboard"
+    open "https://github.com/settings/ssh/new"
     echo \n
-    cat ~/.ssh/id_ed25519.pub
     echo "to auth with github make sure to add the the remote url as ssh url like:"
     echo "git remote add origin git@github.com:githubUserName/repoName.git"
 end
 
-function setupgit2 -d "in case you don't want to create new ssh key"
+function setup-git-ssh-reuse -d "in case you don't want to create new ssh key"
+
     git config --global user.name "$argv[1]"
     git config --global user.email "$argv[2]"
     #store credential in cache 
@@ -238,6 +246,7 @@ function setupgit2 -d "in case you don't want to create new ssh key"
     # private ssh key ssh agent
     ssh-add ~/.ssh/id_ed25519
 end
+
 
 # print repo remote urls
 function giturl
@@ -286,13 +295,28 @@ function get -d "download with curl"
     if string match -q --regex $github_bolb $argv[1]
         set -l dn $argv
         set dn (string replace "/blob/" "/raw/" $argv)
-        curl -LJO\# $dn
+        curl -LJO $dn
     else if string match -q --regex $github_raw $argv[1]
-        curl -LJO\# $argv
+        curl -LJO $argv
     else if string match -q --regex $github_clone $argv[1]
         git clone $argv
     else
-        curl -LJO\# $argv
+        curl -LJO $argv
+    end
+end
+
+function gitlog --description "git commit browser. uses fzf"
+    # todo add "$argv" in there without breaking the no-argv case.
+    git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" | fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --bind "ctrl-m:execute:
+                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R'"
+end
+
+function opm
+    if test -f README.md
+        open README.md
+    else
+        open *.md
     end
 end
 
@@ -336,8 +360,16 @@ function zd -d "list files in dir quickly"
     end
 end
 
-# Function for extracting different files
-function ext
+function ziball -d "compress all file in this dir"
+    if test (count $argv) -eq 0
+        set archiveName (string split "/" (pwd))[-1]
+    else
+        set archiveName $argv
+    end
+    zip -r $archiveName *
+end
+
+function ext -d "extracting different files"
     switch $argv
         case *.tar.bz2
             tar xjf $argv
@@ -583,8 +615,8 @@ function spinner
     set pid $last_pid
     echo " The proccess is running"
     while true
-        for X in ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
-            # for X in - / '|' '\\'
+        # for X in ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
+        for X in - / '|' '\\'
             echo -en "\b$X"
             sleep 0.1
         end

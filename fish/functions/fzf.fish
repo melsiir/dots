@@ -23,7 +23,6 @@ set -x FZF_DEFAULT_OPTS "--cycle --layout=reverse --border --height 90% --previe
     --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D \
     --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C \
     --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"
-
 # set -x FZF_DEFAULT_OPTS "--cycle --layout=reverse --border --height 90% --preview-window=right:70% \
 # --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7 \
 # --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#7dcfff \

@@ -232,6 +232,8 @@ end
 # and put pkgs inside theme
 function updateOfflineRepo
     set repodir $repo/offline-repo
+    command mkdir -p new
+    cp $HOME/../../cache/apt/archives/* ./new
     set -l pkgs ""
     # extract package name from new dir
     find "./new/" -name "*.deb" | while read -l fullnewPkg
