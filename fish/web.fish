@@ -43,7 +43,7 @@ end
 
 function genpass --description "Generate random password" --argument-names length
     test -n "$length"; or set length 15
-    head /dev/urandom | tr -dc "[:alnum:]~!#\$%^&*-+=?./|" | head -c $length | tee /dev/tty | termux-clipboard-set; and echo -e "\n\ncopied to clipboard"
+    head /dev/urandom | tr -dc "[:alnum:]~!#\$%^&*-+=?./|" | head -c $length | tee /dev/tty | copyClip; and echo -e "\n\ncopied to clipboard"
 end
 
 function weather --description "Show weather"
@@ -58,6 +58,19 @@ end
 
 function transfer --description "Upload file to transfer.sh"
     curl --progress-bar --upload-file $argv https://transfer.sh/(basename $argv)
+end
+
+function brave
+    if test (count $argv) -eq 0
+        am start -n com.brave.browser/com.google.android.apps.chrome.Main --activity-clear-task >/dev/null
+    else
+        am start -n com.brave.browser/org.chromium.chrome.browser.ChromeTabbedActivity -d "$argv" --activity-clear-task >/dev/null
+    end
+end
+
+function search
+    set -l searchTerm (string replace -ra "\s+\$|^\s+" "" "$argv" | string replace -ra "\s+" "\+")
+    brave "https://www.google.com/search?q=$searchTerm"
 end
 
 function translate --description "Translate word using [Yandex](https://github.com/dmi3/bin/blob/master/yandex-translate.sh)"

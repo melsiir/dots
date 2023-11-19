@@ -1,0 +1,32 @@
+#!/bin/fish
+
+# $argv & echo $last_pid
+$argv & set PID $last_pid #simulate a long process
+
+
+set -l success DONE
+set -l fail FAIL
+set -l white "\e[1;37m"
+set -l green "\e[1;32m"
+set -l red "\e[1;31m"
+set -l nc "\e[0m"
+set -l spin - \\ \| \/
+
+set msg "operation is running"
+# calculate the column where spinner and status msg will be displayed
+set column (tput cols)-$msg-8
+# display message and position the cursor in $column column
+
+echo -ne $msg
+printf "$columns  "
+
+set i 1
+set sp '\|/-'
+
+while kill -0 $PID 2>/dev/null
+    for i in $spin
+        # echo -ne "\b$i"
+        printf "\b$i"
+        sleep 0.1
+    end
+end

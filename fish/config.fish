@@ -1,11 +1,40 @@
 
 source ~/.config/fish/aliases.fish
-source ~/.config/fish/test.fish
+# source ~/.config/fish/test.fish
 source ~/.config/fish/functions.fish
 source ~/.config/fish/web.fish
 # source ~/.config/fish/onDemand/svgExtractor.fish
 source ~/.config/fish/onDemand/offline.fish
+# colors for echo
+# replace e with cap E to bold
+set RC '\e[0m'
+set RED '\e[31m'
+set YELLOW '\e[33m'
+set GREEN '\e[32m'
+set bold '\033[1m'
+set origin '\033[0m'
+set black '\E[30;1m'
+set red '\E[31;1m'
+set green '\E[32;1m'
+set yellow '\E[33;1m'
+set blue '\E[34;1m'
+set magenta '\E[35;1m'
+set cyan '\E[36;1m'
+set white '\E[37;1m'
+#use like so 
+#echo -e $GREEN"string$RC"
+#echo -e "$GREEN\e string$RC"
+#echo -e "$GREEN string$RC"
 
+
+# FZF options
+# set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git --exclude node_modules'
+set fzf_history_opts --sort --exact --history-size=30000
+set fzf_fd_opts --hidden --follow --exclude=.git
+set fzf_preview_dir_cmd eza -la --git --group-directories-first --icons --color=always
+set fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
+
+fzf_configure_bindings --git_status=\e\cs --git_log=\e\cl --directory=\cp --history=\e\cr --processes=\e\cp --variables=\e\ce
 
 # if status is-interactive
 # Commands to run in interactive sessions can go here
@@ -56,7 +85,7 @@ set -gx downloads /storage/emulated/0/Download
 set -gx obsidian /storage/emulated/0/Documents/My\ obsidian
 
 #: `fzf` defaults configuration.
-# set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude ".git" --exclude node_modules --exclude ".ccls-cache" --exclude ".output"'
+set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude ".git" --exclude node_modules --exclude ".ccls-cache" --exclude ".output" --exclude "*/storage/shared/Android/*" --exclude "*WhatsApp/*" --exclude "*ReadEra/*" --exclude "*.recycle/*" --exclude ".obsidian/*"  --exclude "*storage/shared/*"'
 # set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border'
 # set -gx FZF_ALT_C_COMMAND 'fd -H -t d'
 

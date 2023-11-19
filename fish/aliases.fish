@@ -233,7 +233,7 @@ end
 
 # alias to show the date
 function da -d "show the date"
-    date +%Y-%m-%d %A %T %Z
+    date "+%Y-%m-%d %A %T %Z"
 end
 
 # alias chmod commands

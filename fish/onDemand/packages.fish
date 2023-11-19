@@ -1,5 +1,5 @@
+#if package name contain - like git-delta just write it gitdelta
 # set variable_name@package_and_depenencies@package_dir
-#!/path/to/fish
 set aria2 "c-ares,libxml2,aria2"@aria2
 set bat bat@a_semi_dependent
 set ccrypt ccrypt@a_semi_dependent
@@ -16,16 +16,19 @@ set fd fd@a_semi_dependent
 set fish "libc++,ncurses,libandroid-support,ncurses-utils,man,m4,flex,bc,pcre2,libandroid-spawn,fish"@fish
 set fzf "tmux,fzf"@fzf
 set git git@git
+set gitdelta "git-delta"@a_semi_dependent
 set gnupg "pinentry,libsqlite,libnpth,libksba,libgnutls,gnupg"@gnupg
 set hugo hugo@a_semi_dependent
 set hyperfine hyperfine@hyperfine
 set imagemagick "brotli,fftw,fontconfig,freetype,fribidi,gdk-pixbuf,giflib,glib,harfbuzz,imagemagick,imath,libandroid-posix-semaphore,libandroid-shmem,libaom,libcairo,libdav1d,libde265,libffi,libgraphite,libheif,libjpeg-turbo,libjxl,liblzo,libpixman,libpng,librav1e,librsvg,libtiff,libwebp,libx11,libx265,libxau,libxcb,libxdmcp,libxext,libxft,libxml2,libxrender,littlecms,openexr,openjpeg,pango,ttf-dejavu,liblzma"@imagemagick
 set jq "oniguruma,jq"@jq
 set libqrencode "libpng,libqrencode"@libqrencode
+set libnotify "gdk-pixbuf,glib,libffi,libjpeg-turbo,libnotify,libtiff,libnotify"@libnotify
 set libs ",libxml2,glib,libandroid-support,libdav1d,libaom,libde265,libffi,libheif,libgnutls,libjpeg-turbo,liblzma,libpng,libnpth,libtiff,librav1e,libwebp,libx265,c-ares,libsqlite,"@libs
 set lua "liblua54,lua54"@lua
 set lualanguageserver lua-language-server@coding
 set make make@make
+set nginx nginx@a_semi_dependent
 set neovim "libmsgpack,libiconv,libluajit,libuv,luv,libandroid-support,libvterm,libunibilium,libtermkey,libtreesitter,neovim"@neovim
 set newsboat "json-c,stfl,libsqlite,newsboat"@newsboat
 set nodejs "libicu,c-ares,nodejs"@nodejs
@@ -52,6 +55,7 @@ set uimagemagick "brotli fftw fontconfig freetype fribidi gdk-pixbuf giflib glib
 set unrar unrar@unrar
 set w3m "libgc,w3m"@w3m
 set wget "libuuid,wget"@wget
+set which which@a_semi_dependent
 set xmlstarlet "libxml2,libxslt,xmlstarlet"@xmlstarlet
 set zip "libandroid-support,zip"@zip
 set zoxide zoxide@a_semi_dependent

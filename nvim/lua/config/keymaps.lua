@@ -22,7 +22,7 @@
 -- : s/old/new/ - substitute "new" for "old" only in the first match
 -- : 2,6s/old/new/g - substitue new for old in all accurance between line 2 and line 6.
 -- use gcc to comment with comment.nvim
-
+-- cat text from other file to this file :%! cat file.txt
 --------------------------------------------
 
 -- maps are automatically loaded on the VeryLazy event

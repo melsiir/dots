@@ -1,9 +1,3 @@
-function gu
-    echo "$argv"
-    breakpoint
-    echo $hireme
-end
-
 # Searches and replaces for text in all files in the current folder
 function ftext
     # -i case-insensitive
@@ -62,7 +56,10 @@ function reload --description 'Reloads shell (i.e. invoke as a login shell)'
     exec $SHELL -l
 end
 
-
+function linkbin -d "link .config/bin to .local/bin"
+    mkdir -p ~/.local/bin
+    ln -sf ~/.config/bin/* ~/.local/bin/
+end
 #make md look go by cuting unnecesery content
 # it only cut from start to the text --start and from text --end to the end
 function trimstart
@@ -197,7 +194,7 @@ function gen-ssh
     echo " PreferredAuthentications publickey" >>~/.ssh/config
     echo " IdentityFile ~/.ssh/$argv" >>~/.ssh/config
     echo "" >>~/.ssh/config
-    vim ~/.ssh/config
+    # vim ~/.ssh/config
 end
 
 # github
@@ -215,7 +212,7 @@ function gitssh -d "generate and add ssh key to github"
             git config --global user.email $gitEmail
         else
             set gitName $gitConfigName
-            # set gitEmail $gitConfigEmail
+            set gitEmail $gitConfigEmail
         end
     else
         # if supplied as argument set them from 
@@ -235,19 +232,46 @@ function gitssh -d "generate and add ssh key to github"
         ssh-add ~/.ssh/$keyName
     else
         # generate new key
-        ssh-keygen -f ~/.ssh/$keyName -t ed25519 -C $gitName
+        ssh-keygen -f ~/.ssh/$keyName -t ed25519 -C $gitEmail
+
+        # printf "%s\n" \
+        #     "Host github.com" \
+        #     "  IdentityFile ~/.ssh/$keyName" \
+        #     "  LogLevel ERROR" >>~/.ssh/config
+
         #start ssh agent
         eval (ssh-agent -c)
         # private ssh key ssh agent
         ssh-add ~/.ssh/$keyName
         echo "copy the the following public key to make personal access token in github"
         copyClip ~/.ssh/$keyName.pub
-        echo "the public key copyed to your clipboard"
+        echo -e "$GREEN\e the public key copyed to your clipboard$RC"
         echo "now goto this link and create new access token"
         open "https://github.com/settings/ssh/new"
+        echo
+        echo "to test your ssh key connection run the following command"
+        echo
+        echo -e "$GREEN\e ssh -T git@github.com$RC"
+        echo
+        echo "if you connecting with key for the first time"
+        echo "you may get a warrning message just type yes"
+        echo "if got error says pubkey not autherized re add the the keyfile to the ssh-agent"
     end
     echo "to auth with github make sure to add the the remote url as ssh url like:"
     echo "git remote add origin git@github.com:githubUserName/repoName.git"
+end
+
+function dg
+    set -l repoPath (string replace "https://" "" "$argv[1]")
+    set -l splitPath (string split "/" $repoPath)
+    set -l auther $splitPath[2]
+    set -l repository $splitPath[3]
+    set -l branch $splitPath[5]
+    set -l rootName $splitPath[-1]
+    set -l urlPrefix "https://api.github.com/repos/$author/$repository/contents/"
+    set -l urlPostfix "?ref=$branch"
+
+
 end
 
 # print repo remote urls
@@ -307,6 +331,7 @@ function get -d "download with curl"
     end
 end
 
+
 function gitlog --description "git commit browser. uses fzf"
     # todo add "$argv" in there without breaking the no-argv case.
     git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" | fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --bind "ctrl-m:execute:
@@ -314,7 +339,7 @@ function gitlog --description "git commit browser. uses fzf"
                 xargs -I % sh -c 'git show --color=always % | less -R'"
 end
 
-function opm
+function opm -d "open md documents"
     if test -f README.md
         open README.md
     else
@@ -322,6 +347,19 @@ function opm
     end
 end
 
+function o
+    set -l files (fzf)
+    # set -l files (fzf --print0 --preview "bat --theme ansi --color always {}")
+    if test -z "$files"
+        return
+    end
+    echo -n "$files" | xargs -0 -o "$EDITOR"
+end
+
+function getExt -d "get file extension"
+    set -l ext (string split "." $argv[1])[-1]
+    return $ext
+end
 # run hugo server
 function hug
     # hugo server -F --bind=127.0.0.0:8844 -p=8844 --baseURL=http://127.0.0.0:8844
@@ -331,6 +369,14 @@ end
 function hs -d "start hugo development server"
     # -D include drafts 
     hugo server -D $argv
+end
+
+function draft -d "write drafts for later usage"
+    if test (count $argv) -eq 0
+        vi ~/.draft/draft
+    else
+        printf "$argv\n\n" >>~/.draft/draft
+    end
 end
 # encrypt files with gnupg
 
@@ -361,7 +407,7 @@ function zd -d "list files in dir quickly"
     end
 end
 
-function ziball -d "compress all file in this dir"
+function zipall -d "compress all file in this dir"
     if test (count $argv) -eq 0
         set archiveName (string split "/" (pwd))[-1]
     else
@@ -370,7 +416,7 @@ function ziball -d "compress all file in this dir"
     zip -r $archiveName *
 end
 
-function ext -d "extracting different files"
+function extract -d "extracting different files"
     switch $argv
         case *.tar.bz2
             tar xjf $argv
@@ -528,6 +574,11 @@ function obsBakdots
     cd $dir
 end
 
+function obb
+    set dir (pwd)
+    zip -r $phone/debs/obsdot.zip $obsidian/.obsidian
+end
+
 function obsResdots
     set dir (pwd)
     cd $obsidian
@@ -645,6 +696,7 @@ function toggleship -d "switch on and off starship theme"
 end
 
 function freshstart
+    linkbin
     set -xU repo /storage/0A56-1B19/backup/Termux
     app pkgUpdate
     mkdir -p temp
@@ -792,7 +844,7 @@ end
 
 function terfont -d "change termux font with fuzzy finder"
     set fontdir $repo/nerd_fonts
-    set selectedFont (command ls -R $fontdir | grep -E '\.ttf$' |  fzf --border rounded --border-label="Termux Fonts")
+    set selectedFont (command ls -R $fontdir | grep -E '\.ttf$|\.otf$' |  fzf --border rounded --border-label="Termux Fonts")
     if test -z $selectedFont
         echo "no font selected"
         return
