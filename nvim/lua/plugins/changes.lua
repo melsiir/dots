@@ -1,11 +1,11 @@
 return {
   -- { 'nickeb96/fish.vim'},
 
---   { 'gen740/SmoothCursor.nvim',
---   config = function()
---     require('smoothcursor').setup()
---   end
--- },
+  --   { 'gen740/SmoothCursor.nvim',
+  --   config = function()
+  --     require('smoothcursor').setup()
+  --   end
+  -- },
   {
     "folke/todo-comments.nvim",
     opts = {
@@ -37,6 +37,7 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
+    -- to add ignore list add it to your home .gitignore
     keys = {
       -- add a keymap to browse plugin files
       -- stylua: ignore
@@ -56,9 +57,9 @@ return {
     -- change some options
     -- opts = {
     --   defaults = {
+    --     file_ignore_patterns = {},
     --     prompt_prefix = "🌍 ",
     --     selection_caret = " ",
-    --
     --     layout_strategy = "horizontal",
     --     layout_config = { prompt_position = "top" },
     --     sorting_strategy = "ascending",

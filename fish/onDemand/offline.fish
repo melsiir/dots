@@ -75,6 +75,13 @@ function app -d "install app from local storage"
             #     echo "package $i is not found in this offline repo"
             #     return
 
+        else if test $i = apkeditor
+            cp -r $repo/offline-repo/apkeditor/APKEditor.jar $HOME/.local/bin/
+            cp -r $repo/offline-repo/apkeditor/apkeditor $HOME/.local/bin/
+            echo \n
+            echo "APKEditor installed successfully"
+            return
+
         else
             if string match -q "*-*" $i
                 set noDashPkg (string replace -a "-" "" "$i")
@@ -114,18 +121,26 @@ end
 
 function apprm -d "remove packages and all thair dependencies"
     source ~/.config/fish/onDemand/packages.fish
-    set toremove
+    set -l toremove
+
     for package in $argv
         set raw (string split "@" $$package)[1]
-        for i in (string split ',' $raw)
-            set toremove $toremove $i
-        end
+        set -l pack (echo $raw | string split ",")
+        set -l reversePack (echo $pack[-1..2])
+        set toremove $toremove $reversePack
     end
-    dpkg -r $toremove
+    set toremoveFormatted
+    for indivisualPkg in (string split " " $toremove)
+        set toremoveFormatted $toremoveFormatted $indivisualPkg
+
+    end
+
+    # echo $toremoveFormatted
+    dpkg -r $toremoveFormatted
 end
 
 
-function appremve -d "remove packages and all thair dependencies"
+function appremove -d "remove packages and all thair dependencies"
     #not stable sometimes gives some package that are needed by other installed program
     #but thanks to dpkg it won't let remove package needed by another package
     set toremove
@@ -144,6 +159,11 @@ function appremve -d "remove packages and all thair dependencies"
             rm -r $HOME/.config/omf
             rm -rf $HOME/.local/share/omf
             echo "oh-my-fish removed successfully!"
+            return
+        end
+        if test $argument = apkeditor
+            cp $repo/offline-repo/aapkeditor/* $HOME/.local/bin/
+            echo "apkeditor removed successfully!"
             return
         end
 
@@ -233,7 +253,7 @@ end
 function updateOfflineRepo
     set repodir $repo/offline-repo
     command mkdir -p new
-    cp $HOME/../../cache/apt/archives/* ./new
+    cp $HOME/../../cache/apt/archives/*.deb ./new
     set -l pkgs ""
     # extract package name from new dir
     find "./new/" -name "*.deb" | while read -l fullnewPkg
@@ -281,7 +301,9 @@ function updateOfflineRepo
     end
     #remove debs after done copying
     for i in (string split "," $copyed)
+        # grep $i | rm
         rm $i
+        echo $i
     end
 end
 

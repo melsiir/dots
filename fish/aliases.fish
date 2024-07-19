@@ -82,11 +82,20 @@ end
 function debs
     cd $HOME/../../cache/apt/archives
 end
+
+
+function uu -d "update and upgrade pkgs"
+    pkg update && pkg upgrade
+end
 function nodebs
-    cd $HOME/../usr/var/cache/apt/archives/*
+    # rm -rf $HOME/../usr/var/cache/apt/archives/*
 end
 function deblogs
-    cd ‘/data/data/com.termux/files/usr/var/log/apt/
+    cd /data/data/com.termux/files/usr/var/log/apt/
+end
+
+function rmdebs -d "delete all the downloaded debs files"
+    rm -r $HOME/../../cache/apt/archives/*
 end
 
 # Alias's to modified commands
@@ -371,4 +380,9 @@ function md5
 end
 function sha256
     openssl sha256 $argv | cut -f 2 -d " "
+end
+
+
+function py
+    python $argv
 end

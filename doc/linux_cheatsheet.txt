@@ -41,6 +41,10 @@ replace at line 3
 
 sed -i "3s/cool/nice/" file.txt
 
+replace every line contain dog with cat
+
+sed -i '/\bdog\b/c\cat' file.txt
+
 sort lines in text file alphabiticaly
 sort file.txt
 or you can pip the stdout into othe file
@@ -69,6 +73,20 @@ dirname $HOME/accounting/account.csv
 
 approximate result
 $HOME/accounting
+
+
+
+extract the file name from path
+echo ./some/path/file.ext | awk -F/ '{nlast = NF -0;print $nlast}'
+the result is file.ext
+
+get the file perant dir
+echo ./some/path/file.ext | awk -F/ '{nlast = NF -1;print $nlast}'
+the result is path
+
+extract the file extention from path or a name
+echo ./some/path/file.ext | awk -F. '{nlast = NF -0;print $nlast}'
+the result is ext
 
 print last element of array
 

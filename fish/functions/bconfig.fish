@@ -21,8 +21,7 @@ function bconfig
     zip -qr git.zip .git
     mv $HOME/.config/git.zip $HOME/tmp/config
     cp -r $HOME/.stuff $HOME/tmp/home/
-    cp $HOME/../usr/var/lib/apt/lists/packages-cf.termux.dev_apt_termux-main_dists_stable_InRelease $HOME/tmp/packages
-    cp $HOME/../usr/var/lib/apt/lists/packages-cf.termux.dev_apt_termux-main_dists_stable_main_binary-arm_Packages $HOME/tmp/packages
+    cp $HOME/../usr/var/lib/apt/lists/* $HOME/tmp/packages
     cd $HOME/tmp
     zip -qr myConfig.zip *
     # zip myConfig.zip .bashrc .ssh 

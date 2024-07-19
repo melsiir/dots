@@ -22,6 +22,9 @@ return {
       "typescript",
       "javascript",
       "regex",
+      "rust",
+      "toml",
+      "java",
     },
   },
 }

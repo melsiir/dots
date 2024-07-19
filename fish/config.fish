@@ -27,14 +27,6 @@ set white '\E[37;1m'
 #echo -e "$GREEN string$RC"
 
 
-# FZF options
-# set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git --exclude node_modules'
-set fzf_history_opts --sort --exact --history-size=30000
-set fzf_fd_opts --hidden --follow --exclude=.git
-set fzf_preview_dir_cmd eza -la --git --group-directories-first --icons --color=always
-set fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
-
-fzf_configure_bindings --git_status=\e\cs --git_log=\e\cl --directory=\cp --history=\e\cr --processes=\e\cp --variables=\e\ce
 
 # if status is-interactive
 # Commands to run in interactive sessions can go here
@@ -77,6 +69,10 @@ set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 # NodeJS
 set -gx PATH node_modules/.bin $PATH
+
+set -gx JAVA_HOME /data/data/com.termux/files/usr
+set -gx PATH /data/data/com.termux/files/home/.local/apache-maven-3.6.0/bin $PATH
+set -gx PATH $HOME/.gradle/wrapper/dists/gradle-8.7-bin/bhs2wmbdwecv87pi65oeuq5iu/gradle-8.7/bin $PATH
 #  storage
 set -gx phone /storage/emulated/0
 set -gx sdcard $HOME/storage/external-1
@@ -85,9 +81,20 @@ set -gx downloads /storage/emulated/0/Download
 set -gx obsidian /storage/emulated/0/Documents/My\ obsidian
 
 #: `fzf` defaults configuration.
-set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude ".git" --exclude node_modules --exclude ".ccls-cache" --exclude ".output" --exclude "*/storage/shared/Android/*" --exclude "*WhatsApp/*" --exclude "*ReadEra/*" --exclude "*.recycle/*" --exclude ".obsidian/*"  --exclude "*storage/shared/*"'
+# set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude ".git" --exclude node_modules --exclude ".ccls-cache" --exclude ".output" --exclude "*/storage/shared/Android/*" --exclude "*WhatsApp/*" --exclude "*ReadEra/*" --exclude "*.recycle/*" --exclude ".obsidian/*"  --exclude "*storage/shared/*"'
 # set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border'
 # set -gx FZF_ALT_C_COMMAND 'fd -H -t d'
+
+
+# FZF options
+# set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git --exclude node_modules'
+# set fzf_history_opts --sort --exact --history-size=30000
+# set fzf_fd_opts --hidden --follow --exclude=.git
+# set fzf_preview_dir_cmd eza -la --git --group-directories-first --icons --color=always
+# set fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
+
+
+
 
 # doc links
 function cheatsheet
@@ -102,3 +109,10 @@ function dots
     cd $HOME/.config
 end
 # end
+
+# pnpm
+set -gx PNPM_HOME "/data/data/com.termux/files/home/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end

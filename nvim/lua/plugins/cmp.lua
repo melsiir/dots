@@ -15,6 +15,15 @@ return {
       ----------
       local luasnip = require("luasnip")
       local cmp = require("cmp")
+      -- disable sorting for the sake of clangd
+      -- cmp.setup.filetype("clangd", {
+      --   sorting = {
+      --     enabled = false,
+      --   },
+      -- })
+      opts.sorting = {
+        enabled = false,
+      }
       opts.window = {
         -- disable documentation window for now because
         -- it cause lagging

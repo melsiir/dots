@@ -60,8 +60,8 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     dependencies = {
-      --      "arkav/lualine-lsp-progress",
-      --    "linrongbin16/lsp-progress.nvim",
+      "arkav/lualine-lsp-progress",
+      "linrongbin16/lsp-progress.nvim",
     },
 
     event = "VeryLazy",
@@ -74,7 +74,7 @@ return {
       opts.sections.lualine_y = {}
       opts.sections.lualine_y = {
         "progress",
-        -- require("lsp-progress").progress,
+        require("lsp-progress").progress,
       }
       opts.sections.lualine_z = { "location" }
       -- table.insert(opts.sections.lualine_x, "progress")

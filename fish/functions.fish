@@ -134,7 +134,7 @@ function mkdirg -d "make directory and cd to it"
     cd "$argv"
 end
 
-function mkdirmv -d "make directory and copy files into it"
+function mkdirmv -d "make directory and move files into it"
     if test -z $argv[2]
         echo "please enter files or directories you want to move"
         return
@@ -418,49 +418,49 @@ end
 
 function extract -d "extracting different files"
     switch $argv
-        case *.tar.bz2
+        case "*.tar.bz2"
             tar xjf $argv
 
-        case *.tar.gz
+        case "*.tar.gz"
             tar xzf $argv
 
-        case *.bz2
+        case "*.bz2"
             bunzip2 $argv
 
-        case *.rar
+        case "*.rar"
             unrar x $argv
 
-        case *.gz
+        case "*.gz"
             gunzip $argv
 
-        case *.tar
+        case "*.tar"
             tar xf $argv
 
-        case *.tbz2
+        case "*.tbz2"
             tar xjf $argv
 
-        case *.tgz
+        case "*.tgz"
             tar xzf $argv
 
-        case *.zip
+        case "*.zip"
             unzip $argv
 
-        case *.Z
+        case "*.Z"
             uncompress $argv
 
-        case *.7z
+        case "*.7z"
             7z x $argv
 
-        case *.deb
+        case "*.deb"
             ar x $argv
 
-        case *.tar.xz
+        case "*.tar.xz"
             tar xf $argv
 
-        case *.tar.zst
+        case "*.tar.zst"
             unzstd $argv
 
-        case *
+        case "*"
             echo "'$argv' cannot be extracted via ex"
 
     end
@@ -533,7 +533,11 @@ function qr --description "Prints QR. E.g. super useful when you need to transfe
         # qrencode --background=00000000 --foreground=FFFFFF -t ansi -o -
         return
     else
-        printf "$argv" | qrencode --background=00000000 --foreground=FFFFFF -t ansi -o -
+        if test -e $argv
+            cat $argv | qrencode --background=00000000 --foreground=FFFFFF -t ansi -o -
+        else
+            printf "$argv" | qrencode --background=00000000 --foreground=FFFFFF -t ansi -o -
+        end
     end
 end
 
@@ -567,28 +571,20 @@ function obsbak
     cp -r $obsidian $phone/obsidian_bakcup
 end
 
-function obsBakdots
-    set dir (pwd)
-    cd $obsidian
-    tar -cf ../obsidian.tar .obsidian
-    cd $dir
+function obsBakdots -d "backup obsidian dotfiles"
+    pushd $obsidian
+    zip -r ../obsidian.zip .obsidian
+    popd
 end
 
-function obb
-    set dir (pwd)
-    zip -r $phone/debs/obsdot.zip $obsidian/.obsidian
-end
-
-function obsResdots
-    set dir (pwd)
-    cd $obsidian
-    cd ..
-    cp obsidian.tar ob.tar
-    tar -xf ob.tar
+function obsResdots -d "restore obsidian dotfiles"
+    pushd $obsidian/..
+    cp obsidian.zip ob.zip
+    unzip ob.zip
     rm -rf $obsidian/.obsidian
     mv .obsidian $obsidian
-    rm ob.tar
-    cd $dir
+    rm ob.zip
+    popd
 end
 
 abbr -ag obrs obsResdots
@@ -647,11 +643,15 @@ function getdeps
 end
 
 
-function getlog
+function getlog -d "get the package installtion histort"
     cp /data/data/com.termux/files/usr/var/log/apt/term.log ./
+    extdebs ./term.log
+    # rm ./term.log
 end
 function extdebs -d "extract packges names from log file"
-    sift "_(.*?).deb" $argv[1] >deb.txt
+    # sift "_(.*?).deb" $argv[1] >deb.txt
+    grep -E "_(.*?).deb" $argv[1] >deb.txt
+    # grep -E "_(.*?).deb|Setting up" $argv[1] >deb.txt
     sed -i "s/Preparing to unpack ...\///g" deb.txt
     sed -i "s/archives\///g" deb.txt
     sed -i "s/apt\///g" deb.txt
@@ -697,6 +697,7 @@ end
 
 function freshstart
     linkbin
+    # cp $HOME/.config/bin/* $HOME/.local/bin/
     set -xU repo /storage/0A56-1B19/backup/Termux
     app pkgUpdate
     mkdir -p temp
@@ -867,4 +868,165 @@ function updateAptsrc -d "update apt source list offline"
     cp -fr temp/packages/* $HOME/../usr/var/lib/apt/lists
     rm -rf temp
     rm -rf myConfig.zip
+end
+
+
+#android apk 
+
+function apk
+    java -jar $HOME/.local/bin/APKEditor.jar
+end
+
+function apkdecode
+    apktool decode $argv[1] \
+        --match-original \
+        -api 29 \
+        -o apkout
+end
+
+function apkmerge -d "merge split apks and apkm"
+    # set -l inName 
+    java -jar $HOME/.local/bin/APKEditor.jar m -i $argv
+end
+
+# function apkms -d "merge and sign apks"
+#     set -l filename (echo $argv[1] | awk -F/ '{nlast = NF -0;print $nlast}')
+#     set -l nameNoExtention (echo $filename | string split '.apk')
+#     set -l extention (echo $filename | awk -F. '{nlast = NF -0;print $nlast}')
+#     set -l output $nameNoExtention\_m.apk
+#     java -jar $HOME/.local/bin/APKEditor.jar m -i $argv -o $output
+#     apksign ./$output
+#
+# end
+
+function apksign -d "sign apk files"
+    # apksigner sign --ks $argv[1] $argv[2]
+    if test $HOME/.local/release.keystore
+        cp $repo/Keystore/release.keystore $HOME/.local/
+        cp $repo/Keystore/pass.txt $HOME/.local/
+    end
+    apksigner sign --ks $HOME/.local/release.keystore --ks-pass file:$HOME/.local/pass.txt $argv[1]
+    rm $HOME/.local/release.keystore $HOME/.local/pass.txt
+end
+
+function apkverify
+    apksigner verify -v --print-certs $argv
+end
+
+function genkeystore -d "generate keystore"
+    # validity in days
+    keytool -genkey -v -keystore release.keystore -alias universal -keyalg RSA -keysize 2048 -validity 18000 $argv
+end
+
+
+
+
+# create new project
+
+function nproject -d "create new project"
+
+    function echoLangs
+        echo "what is the type of projects you want to create ?"\n"-1 cpp."\n"-2 rust."\n"-3 python."\n"-4 java."\n"-5 javascript."\n"-6 web-project."\n
+    end
+
+    echo "enter the name of the project: "
+    set projectName (read -l)
+    if test -z $projectName
+        echo "enter the name of the project: "
+        set projectName (read -l)
+    end
+    echoLangs
+    set projectType (read -l)
+
+    mkdir $projectName
+    if test $projectType -le 0; or test $projectType -ge 7
+        echoLangs
+        set projectType (read -l)
+    else
+        if test $projectType = 1
+            touch $projectName/main.cpp
+        else if test $projectType = 2
+            touch $projectName/main.rs
+        else if test $projectType = 3
+            touch $projectName/main.py
+        else if test $projectType = 4
+            touch $projectName/main.py
+        else if test $projectType = 5
+            touch $projectName/main.js
+        else if test $projectType = 6
+            touch $projectName/main.html
+            touch $projectName/style.css
+            touch $projectName/script.js
+
+        end
+    end
+end
+
+#java programing
+
+function rj -d "run java program"
+    if test ./Main.java
+        java Main.java
+    end
+end
+
+# function mvn
+#     /data/data/com.termux/files/home/.local/apache-maven-3.6.0/bin/mvn
+# end
+
+# rust
+
+function rs -d "run rust code without building it"
+    cargo run $argv
+end
+
+function rcpp -d "run c++ code"
+    if test (count $argv) -eq 0
+        clang++ -Wall ./*.cpp && ./a.out
+    else
+        clang++ -Wall $argv && ./a.out
+    end
+end
+
+
+
+function dii -d "get any file parent directory from path"
+    dirname $argv
+end
+
+function killvnc -d "stop vnc server on linux distros that download it from andronix"
+    ps -ef | tail -n +2 | awk '{printf $2; for (i=8; i<=NF; i++) printf " " $i; print""}' | grep vnc | awk '{print $1}' | xargs kill -9 && echo "the vnc server has been stopped successfully"
+    ps -ef | tail -n +2 | awk '{printf $2; for (i=8; i<=NF; i++) printf " " $i; print""}' | grep proot | awk '{print $1}' | xargs kill -9
+    ps -ef | tail -n +2 | awk '{printf $2; for (i=8; i<=NF; i++) printf " " $i; print""}' | grep ssh-agent | awk '{print $1}' | xargs kill -9
+    ps -ef | tail -n +2 | awk '{printf $2; for (i=8; i<=NF; i++) printf " " $i; print""}' | grep gpg-agent | awk '{print $1}' | xargs kill -9
+    ps -ef | tail -n +2 | awk '{printf $2; for (i=8; i<=NF; i++) printf " " $i; print""}' | grep daemon | awk '{print $1}' | xargs kill -9
+
+
+    # pkill vnc
+    # pkill proot
+    # pkill ssh-agent
+    # pkill gpg-agent
+    # pkill xfce
+    # pkill proot
+
+    rm $HOME/arch-fs/tmp/.X*-lock
+    rm $HOME/arch-fs/tmp/.X11-unix/X*
+    echo "the vnc server has been stopped successfully"
+end
+
+function starch -d "start arch distro"
+    $HOME/start-arch.sh
+end
+
+function stubuntu -d "start ubuntu distro"
+    $HOME/start-ubuntu22.sh
+end
+
+
+function fish_search_commands
+    set -l cmd_description
+    set -l selected_cmd (command | fzf --preview 'command -d {}')
+    if test -n "$selected_cmd"
+        man $selected_cmd
+    end
 end

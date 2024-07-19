@@ -3,4 +3,4 @@
 # write qr encoded data from a file
 
 file=$1
-cat later | qrencode -t UTF8
+cat $file | qrencode -t UTF8

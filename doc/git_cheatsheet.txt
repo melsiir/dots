@@ -1,0 +1,7 @@
+
+delete last commit
+git reset --soft HEAD~1
+
+delete last 4 commits
+
+git reset --soft HEAD~4
