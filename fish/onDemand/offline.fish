@@ -289,7 +289,7 @@ function updateOfflineRepo
                 if test -f $pkg
                     rm $pkg
                     set npkg (find "./new" -name "$i\_*.deb")
-                    cp $npkg $olddir
+                    cp -f $npkg $olddir
                     if string match -q "*$npkg*" $copyed
                         #do nothing
                     else
@@ -303,7 +303,6 @@ function updateOfflineRepo
     for i in (string split "," $copyed)
         # grep $i | rm
         rm $i
-        echo $i
     end
 end
 

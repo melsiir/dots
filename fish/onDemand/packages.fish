@@ -18,6 +18,7 @@ set fd fd@a_semi_dependent
 set fish "libc++,ncurses,libandroid-support,ncurses-utils,man,m4,flex,bc,pcre2,libandroid-spawn,fish"@fish
 set ffmpeg "dbus,game-music-emu,libass,libudfread,libbluray,libmp3lame,libopencore-amr,libogg,libflac,libopus,libvorbis,libsndfile,libltdl,libsoxr,libwebrtc-audio-processing,speexdsp,pulseaudio,mpg123,libopenmpt,libsrt,libssh,libtheora,libv4l,libvo-amrwbenc,libvpx,libvidstab,libx264,libzimg,ocl-icd,svt-av1,xvidcore,ffmpeg"@ffmpeg
 set fzf "tmux,fzf"@fzf
+set gh gh@a_semi_dependent
 set git git@git
 set gitdelta "git-delta"@a_semi_dependent
 set gnupg "pinentry,libsqlite,libnpth,libksba,libgnutls,gnupg"@gnupg

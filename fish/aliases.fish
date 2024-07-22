@@ -386,3 +386,23 @@ end
 function py
     python $argv
 end
+
+
+
+abbr pp pnpm
+
+function ppi
+    pnpm i --offline $argv
+end
+
+function caro
+    cargo add --offline $argv
+end
+
+function lv
+    live-server $argv
+end
+
+function sassy
+    sass --watch style.scss:style.css
+end

@@ -30,10 +30,10 @@ return {
   -- { "folke/todo-comments.nvim", enabled= false},
   -- { "folke/persistence.nvim", enabled = false },
   { "rcarriga/nvim-notify", enabled = false },
-  -- { "nvim-treesitter/nvim-treesitter", enabled = true },
+  -- { "nvim-treesitter/nvim-treesitter", enabled = false },
   -- { "nvim-treesitter/nvim-treesitter-textobjects", enabled = false },
   --   -- the this show you where you are in code but iam disable it for now
-  { "nvim-treesitter/nvim-treesitter-context", enabled = false },
+  -- { "nvim-treesitter/nvim-treesitter-context", enabled = false },
   -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
   --responsible from tree nvim-treesitter indentation animatiom
   { "echasnovski/mini.animate", enabled = false },

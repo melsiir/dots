@@ -57,7 +57,7 @@ return {
     -- change some options
     -- opts = {
     --   defaults = {
-    --     file_ignore_patterns = {},
+    --     file_ignore_patterns = { "^node_modules/", "*/node_modules/" },
     --     prompt_prefix = "🌍 ",
     --     selection_caret = " ",
     --     layout_strategy = "horizontal",
