@@ -13,7 +13,7 @@ return {
       servers = {
         html = {
           enabled = true,
-          mason = true,
+          mason = false,
         },
         emmet_ls = {
           enabled = true,
@@ -21,7 +21,15 @@ return {
         },
         cssls = {
           enabled = true,
-          mason = true,
+          mason = false,
+        },
+        jsonls = {
+          enabled = true,
+          mason = false,
+        },
+        eslint = {
+          enabled = true,
+          mason = false,
         },
         lua_ls = {
           enabled = false,

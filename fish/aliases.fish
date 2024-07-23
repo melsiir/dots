@@ -406,3 +406,7 @@ end
 function sassy
     sass --watch style.scss:style.css
 end
+
+function dev
+    pnpm dev $argv
+end
