@@ -1,0 +1,23 @@
+First
+apt install clang libsqlite pkg-config
+
+And maybe 
+binutils
+
+Second
+touch ~/.gyp/include.gypi
+
+Inside it write
+
+{
+	'variables': {
+		'android_ndk_path': ''
+	}
+}
+
+
+Or 
+
+export GYP_DEFINES="android_ndk_path=''"
+
+

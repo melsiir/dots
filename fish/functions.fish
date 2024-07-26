@@ -40,16 +40,24 @@ function cpp
 end
 
 function copyClip -d "copy content to clipboard"
-    if test (count $argv) -eq 0
-        termux-clipboard-set
-    else
-        if test -f $argv[1]
-            termux-clipboard-set <$argv
+    if type -q termux-clipboard-set
+        if test (count $argv) -eq 0
+            return
+            termux-clipboard-set
         else
-            termux-clipboard-set $argv
+            if test -f $argv[1]
+                termux-clipboard-set <$argv
+            else
+                termux-clipboard-set $argv
+            end
+
         end
 
+    else
+        echo $argv
+
     end
+
 end
 
 function reload --description 'Reloads shell (i.e. invoke as a login shell)'
@@ -784,38 +792,40 @@ function gpass -d "cheap password manager"
     end
 end
 
-function pp
-    # set -l list (sed  ':a;N;$!ba;s/\n/@@@@@@@/g'  $HOME/warf.csv)
-    set -l list (cat -A  $HOME/bitward.csv)
-    set -l enteriesNum 0
-    set -l chosenList
-    for i in $list
-        if string match -q "*$argv[1]*" $i
-            set enteriesNum (math $enteriesNum + 1)
-            set chosenList $chosenList \n $i
-        end
-    end
-    # echo -e $chosenList
-    if test $enteriesNum -eq 0
-        echo "entery does not exist"
-        return
-    else #if test $enteriesNum -eq 1
-        set chosenList (string replace ",," ",null," $chosenList)
-        set -l passArray (string split "," $chosenList)
-        echo \n
-        echo " Link:    $passArray[6]"
-        echo " Email:    $passArray[11]"
-        echo " Password:    $passArray[12]"
-        echo " email@password"
-        echo " $passArray[11]@$passArray[12]"
-        echo \n
 
-        # for i in ( string split "," $chosenList)
-        #     echo $i
-        # end
-    end
 
-end
+# function pp
+#     # set -l list (sed  ':a;N;$!ba;s/\n/@@@@@@@/g'  $HOME/warf.csv)
+#     set -l list (cat -A  $HOME/bitward.csv)
+#     set -l enteriesNum 0
+#     set -l chosenList
+#     for i in $list
+#         if string match -q "*$argv[1]*" $i
+#             set enteriesNum (math $enteriesNum + 1)
+#             set chosenList $chosenList \n $i
+#         end
+#     end
+#     # echo -e $chosenList
+#     if test $enteriesNum -eq 0
+#         echo "entery does not exist"
+#         return
+#     else #if test $enteriesNum -eq 1
+#         set chosenList (string replace ",," ",null," $chosenList)
+#         set -l passArray (string split "," $chosenList)
+#         echo \n
+#         echo " Link:    $passArray[6]"
+#         echo " Email:    $passArray[11]"
+#         echo " Password:    $passArray[12]"
+#         echo " email@password"
+#         echo " $passArray[11]@$passArray[12]"
+#         echo \n
+#
+#         # for i in ( string split "," $chosenList)
+#         #     echo $i
+#         # end
+#     end
+#
+# end
 
 function cfont -d "change termux font"
     # rm $HOME/.termux/font.ttf
@@ -1029,4 +1039,30 @@ function fish_search_commands
     if test -n "$selected_cmd"
         man $selected_cmd
     end
+end
+
+
+function pp
+    pnpm $argv
+end
+
+function nuke -d "delete current directory"
+    set -l curdir (pwd)
+    # cd $HOME
+    if test $curdir = $HOME
+        echo "home directory cannot be deleted!"
+        return
+    else
+        set -l deleted (pwd | awk -F/ '{nlast = NF -0;print $nlast}')
+
+        cd ..
+        rm -rf $curdir
+
+        echo "the directory $deleted had been nuked"
+    end
+end
+
+
+function getimgs -d "get sample images for web projects"
+    cp -r $HOME/.stuff/img ./
 end

@@ -5,7 +5,7 @@ function page --wraps='html; css; js' --wraps=html\;\ css\;\ js\;\ print\ \'The\
 
 }
 
-' >>style.css
+' >>styles.css
 
     touch main.js
     echo 'The template created successfully ✅' $argv

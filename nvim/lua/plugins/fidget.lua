@@ -3,7 +3,7 @@ return { -- LSP Progresss UI
   lazy = true, -- Loaded by `lspconfig`.
   -- version = false,
   -- tag = "legacy", -- To avoid breaking changes for now. Maybe test newer versions at some point.
-  enabled = false,
+  enabled = true,
   -- Related documentation: "https://github.com/j-hui/fidget.nvim/blob/main/doc/fidget.md"
   config = function()
     require("fidget").setup({

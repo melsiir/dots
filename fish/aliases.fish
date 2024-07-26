@@ -52,6 +52,7 @@ end
 function vf
     vi (fzf)
 end
+
 # set fon ; $HOME/.termux/font.ttf;end
 
 # package managing

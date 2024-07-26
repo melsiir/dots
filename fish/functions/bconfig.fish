@@ -13,6 +13,7 @@ function bconfig
     end
     cp -r $HOME/.termux $HOME/tmp/home/
     rm $HOME/tmp/home/.termux/*.ttf
+    rm $HOME/tmp/home/.termux/shell
     cp -r $HOME/.ssh $HOME/tmp/home/
     cp $HOME/.gitconfig $HOME/tmp/home/
     cp $HOME/.gitignore $HOME/tmp/home/

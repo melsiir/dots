@@ -46,13 +46,13 @@ return {
         function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
         desc = "Find Plugin File",
       },
-      {
-        "<leader>ff",
-        function()
-          require("telescope.builtin").find_files()
-        end,
-        desc = "Find Files (cwd)",
-      },
+      -- {
+      --   "<leader>ff",
+      --   function()
+      --     require("telescope.builtin").find_files()
+      --   end,
+      --   desc = "Find Files (cwd)",
+      -- },
     },
     -- change some options
     -- opts = {
@@ -67,4 +67,14 @@ return {
     --   },
     -- },
   },
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+        require("nvim-surround").setup({
+            -- Configuration here, or leave empty to use defaults
+        })
+    end
+},
 }

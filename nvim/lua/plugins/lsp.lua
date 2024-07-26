@@ -13,7 +13,7 @@ return {
       servers = {
         html = {
           enabled = true,
-          mason = false,
+          mason = true,
         },
         emmet_ls = {
           enabled = true,
@@ -41,7 +41,7 @@ return {
           --do not install with mason
           mason = false,
         },
-        ruff_lsp = {
+        ruff = {
           --do not install with mason
           mason = false,
           enabled = false,

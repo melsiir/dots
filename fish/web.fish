@@ -43,7 +43,8 @@ end
 
 function genpass --description "Generate random password" --argument-names length
     test -n "$length"; or set length 15
-    head /dev/urandom | tr -dc "[:alnum:]~!#\$%^&*-+=?./|" | head -c $length | tee /dev/tty | copyClip; and echo -e "\n\ncopied to clipboard"
+    head /dev/urandom | tr -dc "[:alnum:]~!#\$%^&*-+=?./|" | head -c $length | tee /dev/tty
+    # | copyClip; and echo -e "\n\ncopied to clipboard"
 end
 
 function weather --description "Show weather"
