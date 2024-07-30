@@ -60,16 +60,19 @@ return {
         {
           name = "luasnip",
           -- disable autocompletion in strings and comments
-          group_index = 1,
-          option = { use_show_condition = true },
-          entry_filter = function()
-            local context = require("cmp.config.context")
-            return not context.in_treesitter_capture("string")
-                and not context.in_syntax_group("String")
-                and not context.in_treesitter_capture("comment")
-              or context.in_syntax_group("Comment")
-          end,
+          -- group_index = 1,
+          -- option = { use_show_condition = true },
+          -- entry_filter = function()
+          --   local context = require("cmp.config.context")
+          --   return not context.in_treesitter_capture("string")
+          --       and not context.in_syntax_group("String")
+          --       and not context.in_treesitter_capture("comment")
+          --     or context.in_syntax_group("Comment")
+          -- end,
         },
+
+
+
         {
           name = "buffer",
           keyword_length = 3,

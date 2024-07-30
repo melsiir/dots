@@ -18,13 +18,24 @@ return {
     -- end,
   },
   {
-    "norcalli/nvim-colorizer.lua",
+    "norcalli/nvim-colorizer.lua", 
     -- event = "Verylazy",
     -- lazy = true,
     opts = {
-      "*",
+      -- "*",
+      css = {
+        css= true
+      }
     },
   },
+  -- {
+  -- "echasnovski/mini.hipatterns",
+  --   config = function()
+  --     require('mini.hipatterns').setup({
+  --
+  --     })
+  --   end
+  -- },
   {
     "chrisgrieser/nvim-spider",
     keys = {
@@ -55,17 +66,29 @@ return {
       -- },
     },
     -- change some options
-    -- opts = {
-    --   defaults = {
-    --     file_ignore_patterns = { "^node_modules/", "*/node_modules/" },
-    --     prompt_prefix = "🌍 ",
-    --     selection_caret = " ",
-    --     layout_strategy = "horizontal",
-    --     layout_config = { prompt_position = "top" },
-    --     sorting_strategy = "ascending",
-    --     winblend = 0,
-    --   },
-    -- },
+opts = {
+  defaults = {
+    file_ignore_patterns = {
+ -- "yarn%.lock",
+ 			"node_modules/",
+      -- "%.local/",
+      -- "%.config/",
+-- 			-- "dist/",
+-- 			-- "%.next",
+-- 			-- "%.git/",
+-- 			-- "build/",
+-- 			-- "target/",
+-- 			-- "package%-lock%.json",
+-- 			--        "venv",
+},
+--         prompt_prefix = "🌍 ",
+--         selection_caret = " ",
+--         layout_strategy = "horizontal",
+--         layout_config = { prompt_position = "top" },
+--         sorting_strategy = "ascending",
+--         winblend = 0,
+},
+},
   },
   {
     "kylechui/nvim-surround",

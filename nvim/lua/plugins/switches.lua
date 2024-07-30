@@ -7,7 +7,7 @@ return {
   -- { "williamboman/mason.nvim", enabled = false },
   -- { "lewis6991/gitsigns.nvim", enabled = false },
   --  { "nvim-lualine/lualine.nvim", enabled = false },
-
+  { "echasnovski/mini.hipatterns", enabled = false },
   --  { "echasnovski/mini.comment", enabled = false },
   -- { "echasnovski/mini.ai", enabled = false },
   -- { "echasnovski/indentscope", enabled = false },

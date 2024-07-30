@@ -90,6 +90,7 @@ function uu -d "update and upgrade pkgs"
 end
 function nodebs
     # rm -rf $HOME/../usr/var/cache/apt/archives/*
+    rm -rf /data/data/com.termux/cache/apt/archives/*
 end
 function deblogs
     cd /data/data/com.termux/files/usr/var/log/apt/
@@ -409,5 +410,5 @@ function sassy
 end
 
 function dev
-    pnpm dev $argv
+    pnpm dev --open $argv
 end

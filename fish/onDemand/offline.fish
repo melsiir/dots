@@ -267,7 +267,7 @@ function updateOfflineRepo
     set curdir (pwd)
     for i in (string split , $pkgs)
         find $repodir -name "$i\_*.deb" | while read -l pkg
-            set repoPkgDir (echo $pkg | awk -F/ '{nlast = NF -1;print $NF}')
+            set repoPkgDir (echo $pkg | awk -F/ '{nlast = NF -1;print $nlast}')
             #this is neat way to get file parent dir but i have no time to work it out
             # set repoPkgDir (dirname $pkg )
             if string match -q "*$repoPkgDir*" $dirstocopy
